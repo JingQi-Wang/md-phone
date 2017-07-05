@@ -11,7 +11,9 @@
 				2
 			</mt-tab-container-item>
 			<mt-tab-container-item id="my-container">
-				<mt-cell v-for="n in 7" title="tab-container 3"></mt-cell>
+				<div class="container">
+					
+				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
 		<!-- tabbar -->
@@ -21,7 +23,7 @@
 				消息
 			</mt-tab-item>
 			<mt-tab-item id="work">
-				<img slot="icon" src="../static/icon/all.svg" class="work">
+				<img slot="icon" src="../static/icon/allo.svg" class="work">
 				工作
 			</mt-tab-item>
 			<mt-tab-item id="my-condition">
@@ -34,6 +36,12 @@
 </template>
 <!-- SCRIPT -->
 <script>
+import messageSrc from '../static/icon/comments.svg'
+import messageSrco from '../static/icon/commentso.svg'
+import allSrc from '../static/icon/all.svg'
+import allSrco from '../static/icon/allo.svg'
+import accountSrc from '../static/icon/account.svg'
+import accountSrco from '../static/icon/accounto.svg'
 export default {
 	data() {
 		return {
@@ -42,7 +50,7 @@ export default {
 		}
 	},
 	watch: {
-		selected: function (val, oldVal) {
+		selected: function (val) {
 			// 这里就可以通过 val 的值变更来确定
 			if(val == 'message'){
 				this.active = 'message-container'				
@@ -60,10 +68,20 @@ export default {
 		//this.get_data()
 	},
 	methods: {
-		changeImg:function(obj){
-			var el = document.getElementsByClassName(obj);
-			
-			console.log()
+		changeImg:function(val){
+			if(val == 'message'){
+				$('.'+ val +'').attr('src',messageSrco);
+				$('.work').attr('src',allSrc);
+				$('.my-condition').attr('src',accountSrc);
+			}else if(val == 'work'){
+				$('.'+ val +'').attr('src',allSrco);
+				$('.message').attr('src',messageSrc);
+				$('.my-condition').attr('src',accountSrc);
+			}else if(val == 'my-condition'){
+				$('.'+ val +'').attr('src',accountSrco);
+				$('.message').attr('src',messageSrc);
+				$('.work').attr('src',allSrc);
+			}
 		}
 		// get_data: function(params) {
 		// 	var v = this

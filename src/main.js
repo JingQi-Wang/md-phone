@@ -9,6 +9,8 @@ Vue.use(Mint)
 import VueRouter from 'vue-router'
 // 使用路由
 Vue.use(VueRouter)
+//引入jquery
+import $ from 'jquery'
 // 引用入口文件为 src/App.vue 
 import App from './App.vue'
 // 引用路由配置文件
