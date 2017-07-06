@@ -10,7 +10,8 @@ import VueRouter from 'vue-router'
 // 使用路由
 Vue.use(VueRouter)
 //引入jquery
-import $ from 'jquery'
+// import $ from 'jquery'
+import jquery from './config/jquery-1.8.0.min'
 // 引用入口文件为 src/App.vue 
 import App from './App.vue'
 // 引用路由配置文件

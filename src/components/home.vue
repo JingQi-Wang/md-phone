@@ -5,14 +5,107 @@
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="message-container">
-				1
+				<div class="container">
+					<!-- MESSAGE SELECT -->
+					<div class="message-select">
+						<select name="">
+							<option value="0">全部</option>
+							<option value="1">已读</option>
+							<option value="2">未读</option>
+							<option value="3">叮消息</option>
+						</select>
+					</div>
+					<!-- MESSAGE CONTENT -->
+					<div class="message-box">
+						<div class="message-item">
+							<div class="message-detail">
+								<h2>14:00&nbsp;&nbsp;系统消息</h2>
+								<p>梦德、冯良发起的物品领用申请需要您进行审批</p>
+								<div>
+									<img slot="icon" src="../static/icon/flowIcon.svg" width="24" height="24">
+									<span>流程任务通知</span>
+								</div>
+							</div>
+							<a href="" class="go-to">前往处理</a>
+						</div>
+
+
+					</div>
+				</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="work-container">
-				2
+				<div class="container">
+					<div class="title-box">
+						<div class="m-office">M-office</div>
+						<div class="m-icon">
+							<div class="office-icon">
+								<img slot="icon" src="../static/icon/set.svg" width="24" height="24">
+							</div>
+							<div class="office-icon">
+								<img slot="icon" src="../static/icon/ring.svg" width="24" height="24">
+							</div>
+						</div>
+					</div>
+					<!-- BANNER -->
+					<div class="banner">
+						
+					</div>
+					<!-- MANNAGE -->
+					<div class="go-mannage">
+						<div class="go-item">
+							<p>带我审批</p>
+							<div class="number">9</div>
+						</div>
+						<i></i>
+						<div class="go-item">
+							<p>出勤天数</p>
+							<div class="number">10</div>
+						</div>
+					</div>
+					<br />
+					<!-- APPLICATION -->
+					<div class="application">
+						
+					</div>
+				
+				</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="my-container">
 				<div class="container">
-					
+					<div class="title-box">
+						<div class="m-office">M-office</div>
+						<div class="m-icon">
+							<div class="office-icon">
+								<img slot="icon" src="../static/icon/ring.svg" width="24" height="24">
+							</div>
+						</div>
+					</div>
+					<br />
+					<div>
+						<mt-cell title="冯良"></mt-cell>
+					</div>
+					<br />
+					<div>
+						<mt-cell title="部门：" value="研发部">
+							<img slot="icon" src="../static/icon/dept.svg" width="24" height="24">
+						</mt-cell>
+						<mt-cell title="岗位：" value="前端开发">
+							<img slot="icon" src="../static/icon/post.svg" width="24" height="24">
+						</mt-cell>
+						<mt-cell title="角色：" value="超级管理员">
+							<img slot="icon" src="../static/icon/role.svg" width="24" height="24">
+						</mt-cell>
+					</div>
+					<br />
+					<div>
+						<mt-cell title="版本：" value="1.0">
+							<img slot="icon" src="../static/icon/version.svg" width="24" height="24">
+						</mt-cell>
+					</div>
+					<br />
+					<div class="out-login">
+						<a href="">退出登录</a>
+					</div>				
 				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
@@ -36,12 +129,14 @@
 </template>
 <!-- SCRIPT -->
 <script>
+/* FOOTER ICON INPUT */
 import messageSrc from '../static/icon/comments.svg'
 import messageSrco from '../static/icon/commentso.svg'
 import allSrc from '../static/icon/all.svg'
 import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
 import accountSrco from '../static/icon/accounto.svg'
+
 export default {
 	data() {
 		return {

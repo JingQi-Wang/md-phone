@@ -1,0 +1,125 @@
+.message-select{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:40px;
+	background-color:#f7f7f7;
+	box-sizing:border-box;
+	border-bottom:1px solid #d9d9d9;
+	display: -webkit-flex;
+	display:flex;
+	align-items:center;
+	padding:0 10px;
+	select{
+		font-size:1em;
+		height:24px;
+		border:0px;
+		background-color:transparent;
+	}
+}
+.message-box{
+	height:100%;
+	box-sizing:border-box;
+	padding-top:40px;
+	overflow-y:auto;
+	.message-item{
+		width:90%;
+		border-radius:5px;
+		margin:5%;		
+		-webkit-border-radius:5px;
+		-moz-border-radius:5px;
+		background-color:#fdfbe8;
+		.message-detail{
+			width:100%;
+			box-sizing:border-box;
+			padding:0 20px;
+			h2{
+				font-size:0.9em;
+				padding:10px 0 0 0;
+				display:block;
+			}
+			p{
+				font-size:1em;
+				padding:10px 0;
+			}
+			div{
+				display: -webkit-flex;
+				display:flex;
+				align-items:center;
+				padding:0 0 10px 0;
+				span{
+					font-size:1em;
+					padding-left:10px;
+				}
+				
+			}
+		}
+		a.go-to{
+			font-size:0.8em;
+			color:#26a2ff;
+			text-align:center;
+			display:block;
+			width:100%;
+			padding:5px 0;
+			border-top:1px dotted #d9d9d9;
+		}
+	}
+}
+
+.banner{
+	width:100%;
+	height:150px;
+	background-color:#ddd;
+}
+.go-mannage{
+	width:100%;
+	padding:10px 0;
+	background-color:#fff;
+	display: -webkit-flex;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	.go-item{
+		display: -webkit-flex;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		width:40%;
+		p{
+			font-size:1em;
+		}
+		.number{
+			width:30px;
+			height:30px;
+			line-height:30px;
+			border:1px solid #d9d9d9;
+			border-radius:3px;
+			-moz-border-radius:3px;
+			-webkit-border-radius:3px;
+			text-align:center;
+			margin-left:10px;
+		}
+	}
+	i{
+		width:1px;
+		height:20px;
+		background-color:#d9d9d9;
+	}
+}
+
+.out-login{	
+	height:40px;
+	background-color:#fff;
+	box-sizing:border-box;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	display: -webkit-flex;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	a{
+		font-size:1em;
+		color:red;
+	}
+}

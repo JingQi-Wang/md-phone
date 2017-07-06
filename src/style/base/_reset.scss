@@ -7,3 +7,12 @@ body, p, ol, ul, li, dl, dd, dt, h1, h2, h3, h4, h5, h6, input {
 	outline: none;
 	border: 0;
 }
+a {
+	text-decoration: none;
+}
+select, a:focus, a:link {
+	outline: none;
+}
+body{
+	font-size:16px;
+}
