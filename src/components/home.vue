@@ -1,6 +1,6 @@
 //home.vue
 <template>
-	<div>
+	<div class="home">
 		
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
@@ -65,7 +65,32 @@
 					<br />
 					<!-- APPLICATION -->
 					<div class="application">
-						
+						<h2>应用：</h2>
+						<hr />
+						<div class="application-item">
+							<div data="0" v-on:click="toPage($event)">
+								<p>考勤打卡</p>
+								<img slot="icon" src="../static/icon/clockIcon.svg" width="35" height="35">
+							</div>
+							<i></i>
+							<div>
+								<p>工作日志</p>
+								<img slot="icon" src="../static/icon/logIcon.svg" width="30" height="30">
+							</div>
+						</div>
+						<hr />
+						<div class="application-item">
+							<div>
+								<p>抄送流程</p>
+								<img slot="icon" src="../static/icon/flowIcon2.svg" width="35" height="35">
+							</div>
+							<i></i>
+							<div>
+								<p>我的流程</p>
+								<img slot="icon" src="../static/icon/flowIcon.svg" width="30" height="30">
+							</div>
+						</div>
+						<hr />
 					</div>
 				
 				</div>
@@ -161,6 +186,14 @@ export default {
 	created () {
 		// 组件创建完后调用的方法,获取数据
 		//this.get_data()
+		$.ajax({
+			url:"http://111.1.49.140:8093/TestServlet",
+			type:"get",
+			dataType:"json",
+			success:function(data){
+				console.log(data)
+			}
+		})
 	},
 	methods: {
 		changeImg:function(val){
@@ -176,6 +209,13 @@ export default {
 				$('.'+ val +'').attr('src',accountSrco);
 				$('.message').attr('src',messageSrc);
 				$('.work').attr('src',allSrc);
+			}
+		},
+		toPage:function(event){
+			var el = event.currentTarget;
+			var a = $(el).attr('data');
+			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
+				this.$router.push({path:'/clock'});
 			}
 		}
 		// get_data: function(params) {
