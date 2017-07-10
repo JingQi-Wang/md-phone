@@ -184,8 +184,12 @@ export default {
 		}
 	},
 	created () {
-		// 组件创建完后调用的方法,获取数据
+		// 组件创建完后执行
 		//this.get_data()
+		
+	},
+	mounted () {
+		//渲染完以后执行，生命周期内只执行一次，初始化数据
 		$.ajax({
 			url:"http://111.1.49.140:8093/TestServlet",
 			type:"get",
@@ -194,6 +198,10 @@ export default {
 				console.log(data)
 			}
 		})
+	},
+	update () {
+		//数据更新重新渲染后会执行
+
 	},
 	methods: {
 		changeImg:function(val){

@@ -1,23 +1,229 @@
 .clock{
-	.clock-group{
+	.remind{
 		width:100%;
 		background-color:#fff;
+		border-bottom:1px solid #d9d9d9;
+		p{
+			font-size:0.8em;
+			line-height:1em;
+			color:#999;
+			padding:15px 0 15px 20px;
+		}
+	}
+	.clock-box{
+		width:100%;
+		background-color:#fff;
+		border-bottom:1px solid #d9d9d9;
+		.duty{
+			width:100%;
+			padding:0 20px;
+			box-sizing:border-box;			
+			.status{
+				display: -webkit-flex;
+				display:flex;
+				align-items:center;
+				padding:20px 0;
+				p{
+					font-size:1em;
+					line-height:1em;
+				}
+				span{
+					font-size:1em;
+					line-height:1em;
+				}
+			}
+			.go-clock{
+				.go-click{
+					width:80%;
+					margin:0 auto;
+					padding:20px;
+					text-align:center;
+					box-sizing:border-box;
+					border:3px solid #d4e4fd;
+					border-radius:10px;
+					-moz-border-radius:10px;
+					-webkit-border-radius:10px;
+					h2,h3{
+						font-size:1.5em;
+						line-height:1em;
+						color:#fff;
+						padding:10px 0;
+					}
+				}
+				p{
+					font-size:0.9em;
+					line-height:1em;
+					text-align:center;
+					padding:20px 0 10px 0;
+				}
+			}
+
+		}
+	}
+	.link-to{
+		padding:8px 10px;
+		overflow:hidden;
+		img{
+			float:right;
+		}
+		.link-explain{
+			font-size:1em;
+			line-height:1em;
+			color:#30c1ef;
+			float:left;
+			padding:5px;
+			box-sizing:border-box;
+			border:1px solid #30c1ef;
+			border-radius:3px;
+			-moz-border-radius:3px;
+			-webkit-border-radius:3px;
+		}
+		.link-calendar{
+			font-size:1em;
+			line-height:1em;
+			color:#30c1ef;
+			float:right;
+			padding:5px;
+		}
+	}
+	//打卡背景颜色
+	.blue{
+		background-color:#5e97f6;
+	}
+	.orange{
+		background-color:#ff9966;
+	}
+	.bdcolor{
+		background-color:#f1f7ff;
+	}
+	//隐藏类
+	.hidden{
+		display:none;
+	}
+}
+.clock-total-explain{
+	.explain{
+		padding:20px;
+		h2{
+			font-size:1.3em;
+			line-height:1em;
+			margin:10px 0;
+		}
+		p{
+			font-size:1em;
+			line-height:1.5em;
+			text-indent:2em;
+			text-align:justify;
+		}
+	}
+}
+.clock-total{
+	.calendar{
+		width:100%;
+		box-sizing:border-box;
+		background-color:#f8f8f8;
+		padding:10px 20px;
+		table{
+			width:100%;
+			text-align:center;
+			th{
+				font-size:0.8em;
+				line-height:1.5em;
+				color:#999;
+			}
+			td{
+				font-size:0.8em;
+				line-height:2em;				
+				div{
+					width:25px;
+					height:25px;
+					margin:0 auto;
+					border-radius:50%;
+					-moz-border-radius:50%;
+					-webkit-border-radius:50%;
+				}
+			}
+			td.currentDay{
+				div{
+					color:#4b8dfa;
+					background-color:#deeaff;
+				}
+			}
+			td.currentMonth,td.currentDay{
+				div.current{
+					color:#fff;
+					background-color:#4b8dfa;
+				}
+			}
+			td.otherMonth{
+				visibility:hidden;
+			}
+		}
+	}
+	.class-box{
+		width:100%;
+		padding:10px 20px;
+		background-color:#ebebeb;
 		box-sizing:border-box;
 		display: -webkit-flex;
 		display:flex;
-		align-items:center;
-		border-bottom:1px solid #d9d9d9;
-		.user{
-			width:70%;
-			border-right:1px solid #d9d9d9;
-			p{
+		p{
+			font-size:0.8em;
+			line-height:1em;
+			color:#999;
+		}
+	}
+	.that-day{
+		.duty{
+			width:100%;
+			padding:15px 20px;
+			background-color:#fff;
+			box-sizing:border-box;
+			display: -webkit-flex;
+			display:flex;
+			border-bottom:1px solid #d9d9d9;
+			p,span{
 				font-size:1em;
-				line-height:2em;
-				padding-left:20px;
+				line-height:1em;
 			}
-			.group{
-				border-top:1px solid #d9d9d9;
-			}
+		}
+	}
+}
+.clock-group{
+	width:100%;
+	background-color:#fff;
+	box-sizing:border-box;
+	display: -webkit-flex;
+	display:flex;
+	align-items:center;
+	border-bottom:1px solid #d9d9d9;
+	overflow:hidden;
+	.user{
+		width:70%;
+		border-right:1px solid #d9d9d9;
+		p{
+			font-size:1em;
+			line-height:2em;
+			padding-left:20px;
+		}
+		.group{
+			border-top:1px solid #d9d9d9;
+		}
+	}
+	.time-select{
+		width:30%;
+		min-width:112px;
+		p{
+			margin:0 auto;
+			width:92px;
+			text-align:center;
+			font-size:0.8em;
+			line-height:1em;
+			background-color:#e9f1ff;
+			padding:10px 0;
+			border-radius:5px;
+			-moz-border-radius:5px;
+			-webkit-border-radius:5px;
 		}
 	}
 }
