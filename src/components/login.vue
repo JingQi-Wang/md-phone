@@ -6,9 +6,7 @@
 			<mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
 		</div>	
 		<mt-button type="primary" size="large" v-on:click="handleClick">登录</mt-button>
-	</div>
-	
-	
+	</div>	
 </template>
 <!-- SCRIPT -->
 <script>
@@ -29,7 +27,7 @@ export default {
 				MessageBox('提示', '请输入密码');
 			}else{
 				$.ajax({
-					url: this.host + "/mdoa/phUser/login.ph",
+					url: this.host + "/mdoa/phone/user/login.ph",
 					data:{
 						userAccount : this.username,
 						password : this.password
@@ -37,6 +35,7 @@ export default {
 					type:"post",
 					dataType:"json",
 					success:function(data){
+						alert(data)
 						if(data == 200){
 							this.$router.push({path:'/home'});
 						}else if(data == 400){
