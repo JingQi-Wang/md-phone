@@ -7,6 +7,9 @@
 		</div>	
 		<mt-button type="primary" size="large" v-on:click="handleClick">登录</mt-button>
 	</div>
+	
+	
+	
 </template>
 <!-- SCRIPT -->
 <script>
@@ -15,8 +18,8 @@ import MessageBox from '../../node_modules/mint-ui/lib/message-box'
 export default {
 	data() {
 		return {
-			username:'',
-			password:''
+			username:'admin',
+			password:'1'
 		}
 	},
 	methods: {
@@ -27,7 +30,7 @@ export default {
 				MessageBox('提示', '请输入密码');
 			}else{
 				$.ajax({
-					url: this.host + "/mdoa/user/login.do",
+					url: this.host + "/mdoa/phUser/login.ph",
 					data:{
 						userAccount : this.username,
 						password : this.password
