@@ -1,7 +1,8 @@
 //home.vue
 <template>
 	<div class="home">
-		
+
+
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="message-container">
