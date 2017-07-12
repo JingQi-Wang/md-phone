@@ -19,6 +19,8 @@ import routes from './config/routes'
 import api from './config/api'
 // 将API方法绑定到全局
 Vue.prototype.$api = api
+// 将接口地址绑定到全局
+Vue.prototype.host = 'http://192.168.0.99:8080'
 // 使用配置文件规则
 const router = new VueRouter({
   routes

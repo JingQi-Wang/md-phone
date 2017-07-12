@@ -20,7 +20,7 @@
 					<p class="group">考勤组：研发考勤组</p>
 				</div>
 				<div class="time-select">
-					<p v-on:click="openPicker">{{ showDateMonthValue }}</p>							
+					<p v-on:click="openPicker">{{ showDateMonthValue }}</p>
 				</div>
 			</div>
 			<!-- calendar -->
@@ -75,6 +75,7 @@ var dateObj = (function(){
 		}
 	};
 })();
+
 export default {
 	data() {
 		return {
