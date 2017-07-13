@@ -19,9 +19,7 @@
 			padding:0 20px;
 			box-sizing:border-box;			
 			.status{
-				display: -webkit-flex;
-				display:flex;
-				align-items:center;
+				@include flex-box(flex-start);
 				padding:20px 0;
 				p{
 					font-size:1em;
@@ -165,8 +163,7 @@
 		padding:10px 20px;
 		background-color:#ebebeb;
 		box-sizing:border-box;
-		display: -webkit-flex;
-		display:flex;
+		@include flex-box(flex-start);
 		p{
 			font-size:0.8em;
 			line-height:1em;
@@ -179,8 +176,7 @@
 			padding:15px 20px;
 			background-color:#fff;
 			box-sizing:border-box;
-			display: -webkit-flex;
-			display:flex;
+			@include flex-box(flex-start);
 			border-bottom:1px solid #d9d9d9;
 			p,span{
 				font-size:1em;
@@ -193,11 +189,9 @@
 	width:100%;
 	background-color:#fff;
 	box-sizing:border-box;
-	display: -webkit-flex;
-	display:flex;
-	align-items:center;
 	border-bottom:1px solid #d9d9d9;
 	overflow:hidden;
+	@include flex-box(flex-start);
 	.user{
 		width:70%;
 		border-right:1px solid #d9d9d9;

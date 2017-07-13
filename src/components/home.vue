@@ -73,7 +73,7 @@
 								<img slot="icon" src="../static/icon/clockIcon.svg" width="35" height="35">
 							</div>
 							<i></i>
-							<div>
+							<div data="1" v-on:click="toPage($event)">
 								<p>工作日志</p>
 								<img slot="icon" src="../static/icon/logIcon.svg" width="30" height="30">
 							</div>
@@ -224,6 +224,8 @@ export default {
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
 				this.$router.push({path:'/clock'});
+			}else if (a == 1) {//本组件data属性设置为0的，页面前往工作日志页面
+				this.$router.push({path:'/workLog'});
 			}
 		}
 		// get_data: function(params) {

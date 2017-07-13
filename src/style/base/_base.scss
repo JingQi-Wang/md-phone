@@ -12,10 +12,7 @@
 		height:48px;
 		border-bottom:1px solid #d9d9d9;
 		box-sizing:border-box;
-		display: -webkit-flex;
-		display:flex;
-		align-items:center;
-		justify-content:space-between;
+		@include flex-box(space-between);
 		.m-office{
 			font-size:1.5em;
 			line-height:1em;
@@ -24,9 +21,7 @@
 			display: -webkit-flex;
 			display:flex;
 			.office-icon{
-				display: -webkit-flex;
-				display:flex;
-				align-items:center;
+				@include flex-box(flex-start);
 				height:47px;			
 				padding:0 10px;
 				box-sizing:border-box;

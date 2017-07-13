@@ -8,6 +8,12 @@ import home from '../components/home.vue'
 import clock from '../components/clock/clock.vue'
 import clockTotal from '../components/clock/clockTotal.vue'
 import clockTotalExplain from '../components/clock/clockTotalExplain.vue'
+//引入考勤子页面
+import workLog from '../components/logManage/workLog.vue'
+import myLog from '../components/logManage/myLog.vue'
+import editLog from '../components/logManage/editLog.vue'
+import writeLog from '../components/logManage/writeLog.vue'
+
 
 // 配置路由
 export default [
@@ -35,6 +41,29 @@ export default [
       {
         path: '/clockTotalExplain',
         component: clockTotalExplain
+      }
+    ]
+  },
+   //工作日志路由调用
+  {
+    path: '/logManage',
+    component: Frame,
+    children: [
+      {
+        path: '/workLog',
+        component: workLog
+      },
+      {
+        path: '/myLog',
+        component: myLog
+      },
+      {
+        path: '/editLog',
+        component: editLog
+      },
+      {
+        path: '/writeLog',
+        component: writeLog
       }
     ]
   }

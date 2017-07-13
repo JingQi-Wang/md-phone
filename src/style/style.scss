@@ -1,3 +1,14 @@
+// width100%
+@mixin center-block{
+	width:100%;
+}
+//弹性盒子
+@mixin flex-box($justify:center){
+	display: -webkit-flex;
+	display:flex;
+	align-items:center;
+	justify-content:$justify;
+}
 //base
 @import "base/reset.scss";
 @import "base/base.scss";
@@ -8,3 +19,4 @@
 @import "scss/login.scss";
 
 @import "scss/clock/clock.scss";
+@import "scss/logManage/workLog.scss";

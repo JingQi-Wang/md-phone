@@ -8,10 +8,8 @@
 		background-color:#f7f7f7;
 		box-sizing:border-box;
 		border-bottom:1px solid #d9d9d9;
-		display: -webkit-flex;
-		display:flex;
-		align-items:center;
 		padding:0 10px;
+		@include flex-box(flex-start);
 		select{
 			font-size:1em;
 			line-height:1em;
@@ -82,15 +80,9 @@
 		width:100%;
 		padding:10px 0;
 		background-color:#fff;
-		display: -webkit-flex;
-		display:flex;
-		justify-content:center;
-		align-items:center;
+		@include flex-box;
 		.go-item{
-			display: -webkit-flex;
-			display:flex;
-			justify-content:center;
-			align-items:center;
+			@include flex-box;
 			width:50%;
 			p{
 				font-size:1em;
@@ -133,16 +125,10 @@
 			padding:10px 0 10px 10px;
 		}
 		.application-item{
-			display: -webkit-flex;
-			display:flex;
-			justify-content:center;
-			align-items:center;
+			@include flex-box;
 			div{
 				width:50%;
-				display: -webkit-flex;
-				display:flex;
-				justify-content:center;
-				align-items:center;
+				@include flex-box;
 				p{
 					font-size:1em;
 					line-height:1em;
@@ -164,10 +150,7 @@
 		box-sizing:border-box;
 		border-top:1px solid #d9d9d9;
 		border-bottom:1px solid #d9d9d9;
-		display: -webkit-flex;
-		display:flex;
-		justify-content:center;
-		align-items:center;
+		@include flex-box;
 		a{
 			font-size:1em;
 			line-height:1em;
