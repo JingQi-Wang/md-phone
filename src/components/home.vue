@@ -80,7 +80,7 @@
 						</div>
 						<hr />
 						<div class="application-item">
-							<div>
+							<div v-on:click="test">
 								<p>抄送流程</p>
 								<img slot="icon" src="../static/icon/flowIcon2.svg" width="35" height="35">
 							</div>
@@ -168,6 +168,15 @@ export default {
 			selected:'work',
 			active:'work-container'
 		}
+	},	
+	created () {
+		// 组件创建完后执行		
+	},
+	mounted () {
+		//渲染完以后执行，生命周期内只执行一次，初始化数据
+	},
+	update () {
+		//数据更新重新渲染后会执行
 	},
 	watch: {
 		selected: function (val) {
@@ -183,27 +192,17 @@ export default {
 			this.changeImg(val);
 		}
 	},
-	created () {
-		// 组件创建完后执行
-		//this.get_data()
-		
-	},
-	mounted () {
-		//渲染完以后执行，生命周期内只执行一次，初始化数据
-		$.ajax({
-			url:"http://111.1.49.140:8093/TestServlet",
-			type:"get",
-			dataType:"json",
-			success:function(data){
-				console.log(data)
-			}
-		})
-	},
-	update () {
-		//数据更新重新渲染后会执行
-
-	},
 	methods: {
+		test:function(){
+			$.ajax({
+				url: this.host + "/mdoa/phUser/test.ph",
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					console.log(data)
+				}
+			})
+		},
 		changeImg:function(val){
 			if(val == 'message'){
 				$('.'+ val +'').attr('src',messageSrco);
@@ -228,14 +227,6 @@ export default {
 				this.$router.push({path:'/workLog'});
 			}
 		}
-		// get_data: function(params) {
-		// 	var v = this
-		// 	if (!params) params = {}
-		// 	// 我们这里用全局绑定的 $api 方法来获取数据
-		// 	v.$api.get('TestServlet', params, function(r) {
-		// 		v.lists = r.data
-		// 	})
-		// }
 	}
 }
 </script>
