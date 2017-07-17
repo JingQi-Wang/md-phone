@@ -20,8 +20,30 @@ export default {
 		}
 	},
 	beforeCreate () {
-		if(localStorage.getItem('userName')){
-			this.$router.push({path:'/home'});
+		var el = this;
+		if(localStorage.getItem('userName')&&localStorage.getItem('password')){
+			$.ajax({
+				url: "http://192.168.0.66:8081/mdoa/phUser/login.ph",
+				data:{
+					sessionId: localStorage.getItem('sessionId') || null,
+					userAccount : localStorage.getItem('userName'),
+					password : localStorage.getItem('password')
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					//	ajax session 参数处理 
+					if(data.sessionId){
+						el.$index.haveSeeionId(data.sessionId)
+					}
+					if(data.success){
+						el.$router.push({path:'/home'});
+					}
+				},
+				error:function() {
+					MessageBox('提示', '登录失败');
+				}
+			})
 		}
 	},
 	methods: {
@@ -31,32 +53,35 @@ export default {
 				MessageBox('提示', '请输入用户名');
 			}else if(el.password == ''){
 				MessageBox('提示', '请输入密码');
-			}else{				
+			}else{
 				$.ajax({
-					url: el.host + "/mdoa/phUser/login.ph",
+					url: "http://192.168.0.66:8081/mdoa/phUser/login.ph",
 					data:{
+						sessionId: localStorage.getItem('sessionId') || null,
 						userAccount : el.userName,
 						password : el.password
 					},
 					type:"post",
 					dataType:"json",
 					success:function(data){
-						if(data == 200){
+						if(data.sessionId){
+							localStorage.setItem('sessionId',data.sessionId);
+						}
+						if(data.success){
 							localStorage.setItem('userName',el.userName);
+							localStorage.setItem('password',el.password);
 							el.$router.push({path:'/home'});
-						}else if(data == 400){
-							MessageBox('提示', '密码或验证码错误');
-						}else if(data == 500){
-							MessageBox('提示', '服务器异常');
+						}else{
+							MessageBox('提示', data.message);
 						}
 					},
 					error:function() {
-						
+						MessageBox('提示', '登录失败');
 					}
 				})
-			}
-			
+			}			
 		}
+
 	}
 
 }

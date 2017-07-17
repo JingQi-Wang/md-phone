@@ -1,5 +1,5 @@
 // 配置API接口地址
-var root = 'http://111.1.49.140:8093';
+var root = 'http://192.168.0.66:8080';
 // 引用superagent
 var request = require('superagent');
 // 自定义判断元素类型JS

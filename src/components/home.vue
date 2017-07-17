@@ -170,7 +170,7 @@ export default {
 		}
 	},	
 	created () {
-		// 组件创建完后执行		
+		// 组件创建完后执行	
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
@@ -194,13 +194,10 @@ export default {
 	},
 	methods: {
 		test:function(){
-			$.ajax({
-				url: this.host + "/mdoa/phUser/test.ph",
-				type:"post",
-				dataType:"json",
-				success:function(data){
-					console.log(data)
-				}
+			var el = this;
+			el.$index.ajax(this,'mdoa/phUser/test.ph',null,function(data){
+				//成功回调
+				
 			})
 		},
 		changeImg:function(val){
