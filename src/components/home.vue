@@ -169,18 +169,21 @@ export default {
 		}
 	},	
 	created () {
-		// 组件创建完后执行	
-	},
-	mounted () {
-		//渲染完以后执行，生命周期内只执行一次，初始化数据
+		// 组件创建完后执行
 		var el = this;
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
-			el.$user = data
-		})
+			$.extend(el.$user, data);
+		})	
+	},
+	mounted () {
+		//渲染完以后执行，生命周期内只执行一次，初始化数据	
+		console.log(this)
+		console.log(this.$user)
 	},
 	update () {
 		//数据更新重新渲染后会执行
+
 	},
 	watch: {
 		selected: function (val) {

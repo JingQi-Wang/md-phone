@@ -35,7 +35,7 @@ import api from './config/api'
 Vue.prototype.$api = api
 
 // 为全局设置一个全局的用户对象
-Vue.prototype.$user = null
+Vue.prototype.$user = new Object()
 
 // 运行
 new Vue({
