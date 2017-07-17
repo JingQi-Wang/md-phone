@@ -1,7 +1,6 @@
 //home.vue
 <template>
 	<div class="home">
-
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="message-container">
@@ -80,7 +79,7 @@
 						</div>
 						<hr />
 						<div class="application-item">
-							<div v-on:click="test">
+							<div>
 								<p>抄送流程</p>
 								<img slot="icon" src="../static/icon/flowIcon2.svg" width="35" height="35">
 							</div>
@@ -174,6 +173,11 @@ export default {
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
+		var el = this;
+		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
+			// 成功回调
+			el.$user = data
+		})
 	},
 	update () {
 		//数据更新重新渲染后会执行
@@ -193,13 +197,6 @@ export default {
 		}
 	},
 	methods: {
-		test:function(){
-			var el = this;
-			el.$index.ajax(this,'mdoa/phUser/test.ph',null,function(data){
-				//成功回调
-				
-			})
-		},
 		changeImg:function(val){
 			if(val == 'message'){
 				$('.'+ val +'').attr('src',messageSrco);
@@ -220,7 +217,7 @@ export default {
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
 				this.$router.push({path:'/clock'});
-			}else if (a == 1) {//本组件data属性设置为0的，页面前往工作日志页面
+			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
 			}
 		}

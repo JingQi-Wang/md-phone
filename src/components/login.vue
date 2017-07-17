@@ -23,7 +23,7 @@ export default {
 		var el = this;
 		if(localStorage.getItem('userName')&&localStorage.getItem('password')){
 			$.ajax({
-				url: "http://192.168.0.66:8081/mdoa/phUser/login.ph",
+				url: "http://192.168.0.100:8080/mdoa/phUser/login.ph",
 				data:{
 					sessionId: localStorage.getItem('sessionId') || null,
 					userAccount : localStorage.getItem('userName'),
@@ -55,7 +55,7 @@ export default {
 				MessageBox('提示', '请输入密码');
 			}else{
 				$.ajax({
-					url: "http://192.168.0.66:8081/mdoa/phUser/login.ph",
+					url: "http://192.168.0.100:8080/mdoa/phUser/login.ph",
 					data:{
 						sessionId: localStorage.getItem('sessionId') || null,
 						userAccount : el.userName,
@@ -72,7 +72,7 @@ export default {
 							localStorage.setItem('password',el.password);
 							el.$router.push({path:'/home'});
 						}else{
-							MessageBox('提示', data.message);
+							MessageBox('提示', '登录失败,请重新登录');
 						}
 					},
 					error:function() {

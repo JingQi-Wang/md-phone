@@ -34,7 +34,8 @@ import api from './config/api'
 // 将API方法绑定到全局
 Vue.prototype.$api = api
 
-
+// 为全局设置一个全局的用户对象
+Vue.prototype.$user = null
 
 // 运行
 new Vue({
