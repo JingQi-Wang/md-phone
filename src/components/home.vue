@@ -106,17 +106,17 @@
 					</div>
 					<br />
 					<div>
-						<mt-cell title="冯良"></mt-cell>
+						<mt-cell v-bind:title="userName"></mt-cell>
 					</div>
 					<br />
 					<div>
-						<mt-cell title="部门：" value="研发部">
+						<mt-cell title="部门：" v-bind:value="departmentName">
 							<img slot="icon" src="../static/icon/dept.svg" width="24" height="24">
 						</mt-cell>
-						<mt-cell title="岗位：" value="前端开发">
+						<mt-cell title="岗位：" v-bind:value="postName">
 							<img slot="icon" src="../static/icon/post.svg" width="24" height="24">
 						</mt-cell>
-						<mt-cell title="角色：" value="超级管理员">
+						<mt-cell title="角色：" value="超级管理员...">
 							<img slot="icon" src="../static/icon/role.svg" width="24" height="24">
 						</mt-cell>
 					</div>
@@ -128,7 +128,7 @@
 					</div>
 					<br />
 					<div class="out-login">
-						<a href="">退出登录</a>
+						<a data="logout" v-on:click="toPage">退出登录</a>
 					</div>				
 				</div>
 			</mt-tab-container-item>
@@ -165,7 +165,10 @@ export default {
 	data() {
 		return {
 			selected:'work',
-			active:'work-container'
+			active:'work-container',
+			userName:'',
+			departmentName:'',
+			postName:''
 		}
 	},	
 	created () {
@@ -174,12 +177,14 @@ export default {
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
 			$.extend(el.$user, data);
-		})	
+		})
+		console.log(el)
 	},
 	mounted () {
-		//渲染完以后执行，生命周期内只执行一次，初始化数据	
-		console.log(this)
-		console.log(this.$user)
+		//渲染完以后执行，生命周期内只执行一次，初始化数据
+		this.userName = this.$user.userName;
+		this.departmentName = this.$user.departmentName;
+		this.postName = this.$user.postName;
 	},
 	update () {
 		//数据更新重新渲染后会执行
@@ -222,6 +227,10 @@ export default {
 				this.$router.push({path:'/clock'});
 			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
+			}else if(a == 'logout'){
+				localStorage.removeItem('userName');
+				localStorage.removeItem('password');
+				this.$router.push({path:'/'});
 			}
 		}
 	}

@@ -15,6 +15,7 @@ import MessageBox from '../../node_modules/mint-ui/lib/message-box'
 export default {
 	data() {
 		return {
+			url:'http://192.168.0.99:8080/mdoa/phUser/login.ph',
 			userName:'',
 			password:''
 		}
@@ -23,7 +24,7 @@ export default {
 		var el = this;
 		if(localStorage.getItem('userName')&&localStorage.getItem('password')){
 			$.ajax({
-				url: "http://192.168.0.100:8080/mdoa/phUser/login.ph",
+				url: el.url,
 				data:{
 					sessionId: localStorage.getItem('sessionId') || null,
 					userAccount : localStorage.getItem('userName'),
@@ -55,7 +56,7 @@ export default {
 				MessageBox('提示', '请输入密码');
 			}else{
 				$.ajax({
-					url: "http://192.168.0.100:8080/mdoa/phUser/login.ph",
+					url: el.url,
 					data:{
 						sessionId: localStorage.getItem('sessionId') || null,
 						userAccount : el.userName,
