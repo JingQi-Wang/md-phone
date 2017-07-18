@@ -15,7 +15,7 @@ import MessageBox from '../../node_modules/mint-ui/lib/message-box'
 export default {
 	data() {
 		return {
-			url:'http://192.168.0.99:8080/mdoa/phUser/login.ph',
+			url:'http://192.168.0.95:8888/mdoa/phUser/login.ph',
 			userName:'',
 			password:''
 		}

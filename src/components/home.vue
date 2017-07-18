@@ -178,7 +178,6 @@ export default {
 			// 成功回调
 			$.extend(el.$user, data);
 		})
-		console.log(el)
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据

@@ -1,11 +1,64 @@
+.logArea{
+    height: 90.5%;
+    box-sizing: border-box;
+    overflow-y: auto;
+	.logBox{
+		@include w100;
+		box-sizing: border-box;
+		padding:10px 20px;
+		overflow-y:auto;
+		.logOne{
+			border-top:13px solid rgb(188, 215, 235);
+			@include w100;
+			box-sizing: border-box;
+			padding:24px;
+			background:#fff;
+			h3{
+				@include word-color;
+				font-size:22px;
+				line-height:1.8em;
+				font-weight:400;
+			}
+			h4{
+				font-size:22px;
+				line-height:1.8em;
+				font-weight:400;
+			}
+			.logContent{
+				@include word-color(#999);
+				font-size:18px;
+			}
+			p{
+				@include word-color(#999);
+				font-size:18px;
+				overflow:hidden;
+				.logTime{
+					float:right;
 
+				}
+			}
+		}
+	}
+}
 .workLog{
 	.workLogBottom{
 		position:fixed;
 		left:0;
 		bottom:0;
-		line-height:4em;
+		line-height:2.8em;
 		background-color: #fff;
-		@include center-block;
+		@include w100;
+		display:flex;
+		border-top: 1px solid #d9d9d9;
+		border-buttom: 1px solid #d9d9d9;
+		div{
+			flex-grow: 1;
+			text-align:center;
+			@include word-color;
+			width:50%;
+		}
+		.writeLog{
+			border-left: 1px solid #d9d9d9;
+		}
 	}
 }

@@ -15,7 +15,7 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 // 接口地址
-var root = 'http://192.168.0.99:8080/mdoa'
+var root = 'http://192.168.0.95:8888/mdoa'
 //全局的方法
 export default {
     //登录后的请求公用方法
@@ -35,6 +35,8 @@ export default {
                 if(data.success){
                     if(data.returnObj){
                         succeed(data.returnObj)
+                    }else if(data.message){
+                        succeed(data.message)
                     }
                 }else{
                     localStorage.removeItem('userName');

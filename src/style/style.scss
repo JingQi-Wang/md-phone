@@ -1,5 +1,5 @@
 // width100%
-@mixin center-block{
+@mixin w100{
 	width:100%;
 }
 //弹性盒子
@@ -9,6 +9,11 @@
 	align-items:center;
 	justify-content:$justify;
 }
+//
+@mixin word-color($color:#6ea9f1){
+	color: $color;	
+}
+
 //base
 @import "base/reset.scss";
 @import "base/base.scss";
@@ -20,3 +25,6 @@
 
 @import "scss/clock/clock.scss";
 @import "scss/logManage/workLog.scss";
+@import "scss/logManage/myLog.scss";
+@import "scss/logManage/editLog.scss";
+@import "scss/logManage/writeLog.scss";
