@@ -10,6 +10,7 @@ import 'mint-ui/lib/style.css'
 // 使用 mint-ui
 Vue.use(Mint)
 
+
 // 引用路由
 import VueRouter from 'vue-router'
 // 使用路由

@@ -1,6 +1,7 @@
 //home.vue
 <template>
 	<div class="home">
+		<div>{{ aaa }}</div>
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="message-container">
@@ -38,7 +39,7 @@
 						<div class="m-office">M-office</div>
 						<div class="m-icon">
 							<div class="office-icon">
-								<img slot="icon" src="../static/icon/set.svg" width="24" height="24">
+								<img slot="icon" src="../static/icon/set.svg" width="24" height="24" data="system" v-on:click="toPage">
 							</div>
 							<div class="office-icon">
 								<img slot="icon" src="../static/icon/ring.svg" width="24" height="24">
@@ -116,7 +117,7 @@
 						<mt-cell title="岗位：" v-bind:value="postName">
 							<img slot="icon" src="../static/icon/post.svg" width="24" height="24">
 						</mt-cell>
-						<mt-cell title="角色：" value="超级管理员...">
+						<mt-cell title="角色：" v-bind:value="roles">
 							<img slot="icon" src="../static/icon/role.svg" width="24" height="24">
 						</mt-cell>
 					</div>
@@ -160,33 +161,42 @@ import allSrc from '../static/icon/all.svg'
 import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
 import accountSrco from '../static/icon/accounto.svg'
+import { Toast } from 'mint-ui';
 
 export default {
 	data() {
 		return {
+			aaa:'',
 			selected:'work',
 			active:'work-container',
 			userName:'',
 			departmentName:'',
-			postName:''
+			postName:'',
+			roles:''
 		}
-	},	
+	},
 	created () {
 		// 组件创建完后执行
 		var el = this;
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
 			$.extend(el.$user, data);
+			el.userName = data.userName;
+			el.departmentName = data.departmentName;
+			el.postName = data.postName;
+			var str = '';
+			for(let i=0; i<data.roles.length; i++){
+				str += data.roles[i].roleName + ' '
+			}
+			el.roles = str;
 		})
-		console.log(el)
+		
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
-		this.userName = this.$user.userName;
-		this.departmentName = this.$user.departmentName;
-		this.postName = this.$user.postName;
+	
 	},
-	update () {
+	updated () {
 		//数据更新重新渲染后会执行
 
 	},
@@ -224,13 +234,23 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
-				this.$router.push({path:'/clock'});
+				if(this.$user.attendanceGroupId){
+					this.$router.push({path:'/clock'});
+				}else{
+					Toast({
+						message: '还未加入考勤组,请加入后再打卡',
+						position: 'center',
+						duration: 2000
+					});
+				}
 			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
 			}else if(a == 'logout'){
 				localStorage.removeItem('userName');
 				localStorage.removeItem('password');
 				this.$router.push({path:'/'});
+			}else if(a == 'system'){
+				this.$router.push({path:'/system'});
 			}
 		}
 	}

@@ -20,8 +20,8 @@
 					<!-- clock base html -->
 					<div class="clock-group">
 						<div class="user">
-							<p>冯良</p>
-							<p class="group">考勤组：研发考勤组</p>
+							<p>{{ userName }}</p>
+							<p class="group">考勤组：{{ attendanceGroupName }}</p>
 						</div>
 						<div class="time-select">
 							<p data="ymd" v-on:click="openPicker($event)">{{ showDateValue }}</p>							
@@ -34,31 +34,31 @@
 					<!-- clock box -->
 					<div class="clock-box">
 						<!-- on duty -->
-						<div class="duty bdcolor">
+						<div class="duty bdcolor" id="on">
 							<div class="status">
 								<p>上班：</p>
-								<p>未打卡</p>
-								<span>(正常打卡)</span>
+								<p></p>
+								<span></span>
 							</div>
-							<div class="go-clock">
+							<div class="go-clock hidden">
 								<div class="go-click blue">
-									<h2>上班打卡</h2>
-									<h3>16:58:58</h3>
+									<h2></h2>
+									<h3></h3>
 								</div>
 								<p>已进入考勤WIFI：达美印染厂行政楼</p>
 							</div>
 						</div>
 						<!-- off duty -->
-						<div class="duty">
+						<div class="duty" id="off">
 							<div class="status">
 								<p>下班：</p>
-								<p>未打卡</p>
-								<span>(正常打卡)</span>
+								<p></p>
+								<span></span>
 							</div>
 							<div class="go-clock hidden">
 								<div class="go-click blue">
-									<h2>下班班打卡</h2>
-									<h3>16:58:58</h3>
+									<h2></h2>
+									<h3></h3>
 								</div>
 								<p>已进入考勤WIFI：达美印染厂行政楼</p>
 							</div>
@@ -83,8 +83,8 @@
 					<!-- clock base html -->
 					<div class="clock-group">
 						<div class="user">
-							<p>冯良</p>
-							<p class="group">考勤组：研发考勤组</p>
+							<p>{{ userName }}</p>
+							<p class="group">考勤组：{{ attendanceGroupName }}</p>
 						</div>
 						<div class="time-select">
 							<p data="ym" v-on:click="openPicker($event)">{{ showDateMonthValue }}</p>
@@ -143,23 +143,30 @@ import clockSrc from '../../static/icon/clock.svg'
 import clockSrco from '../../static/icon/clocko.svg'
 import statisticsSrc from '../../static/icon/statistics.svg'
 import statisticsSrco from '../../static/icon/statisticso.svg'
+import { Toast } from 'mint-ui';
 
 export default {
 	data() {
 		return {
 			selected:'clock',
 			active:'clock-container',
+			userName:this.$user.userName,
+			attendanceGroupName:this.$user.attendanceGroupName,
 			dateValue: new Date(),
 			showDateValue:new Date().Format('yyyy-MM-dd'),
 			dateMonthValue:new Date(),
 			showDateMonthValue:new Date().Format('yyyy年MM月'),
-			attendanceDays:'4天',//出勤天数
-			restDays:'4天',//休息天数
-			lateTimes:'1次',//迟到
-			earlyTimes:'1次',//早退
-			missTimes:'2次',//缺卡
-			absentDays:'1次'//旷工
+			attendanceDays:'0天',//出勤天数
+			restDays:'0天',//休息天数
+			lateTimes:'0次',//迟到
+			earlyTimes:'0次',//早退
+			missTimes:'0次',//缺卡
+			absentDays:'0次'//旷工
 		}
+	},
+	mounted () {
+		this.getMyClockMonthForm();
+		this.getClockState();
 	},
 	watch: {
 		selected: function (val) {
@@ -176,9 +183,47 @@ export default {
 	methods: {
 		selectMonthPicker:function(value){
 			this.showDateMonthValue = value.Format('yyyy年MM月');
+			this.getMyClockMonthForm();
+		},
+		getMyClockMonthForm:function(){
+			var el = this;
+			el.$index.ajax(this, '/phClock/getMyClockMonthForm.ph', {balanceMonth:el.dateMonthValue.Format('yyyy-MM')}, function(data){
+				// 成功回调
+				if(data.clockMonthBalanceForm){
+					var a = data.clockMonthBalanceForm;
+					el.attendanceDays = a.attendanceDays +'天';
+					el.restDays = a.restDays +'天';
+					el.lateTimes = a.lateTimes +'次';
+					el.earlyTimes = a.earlyTimes +'次';
+					el.missTimes = a.missTimes +'次';
+					el.absentDays = a.absentDays +'次';
+				}else{
+					el.attendanceDays = '0天';
+					el.restDays = '0天';
+					el.lateTimes = '0次';
+					el.earlyTimes = '0次';
+					el.missTimes = '0次';
+					el.absentDays = '0次';
+				}		
+			})
 		},
 		selectPicker:function(value){
 			this.showDateValue = value.Format('yyyy-MM-dd');
+		},
+		getClockState:function(){	
+			var el = this;
+			el.$index.ajax(this, '/phClock/getMyClockState.ph', null, function(data){
+				// 成功回调
+				if(obj.attendanceToday){
+					
+				}else{
+					Toast({
+						message: '今日加入考勤组，请您明日开始打卡!',
+						position: 'center',
+						duration: 2000
+					});
+				}
+			})
 		},
 		openPicker:function(event){
 			var el = event.currentTarget;

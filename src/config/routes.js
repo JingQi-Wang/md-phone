@@ -2,8 +2,11 @@
 import Frame from '../frame/subroute.vue'
 //引入登录页
 import login from '../components/login.vue'
-// 引用模板
+// 引用主页面
 import home from '../components/home.vue'
+// 引用系统设置子页面
+import system from '../components/system/system.vue'
+import wifi from '../components/system/wifi.vue'
 //引入考勤子页面
 import clock from '../components/clock/clock.vue'
 import clockTotal from '../components/clock/clockTotal.vue'
@@ -24,6 +27,22 @@ export default [
   {
     path: '/home',
     component: home
+  },
+  // 系统设置
+  {
+    path: '/system',
+    component: Frame,
+    children: [
+      {
+        path: '/',
+        component: system
+      },
+      {
+        path: '/wifi',
+        component: wifi
+      }
+    ]
+   
   },
   //考勤路由调用
   {

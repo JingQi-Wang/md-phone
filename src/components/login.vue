@@ -11,20 +11,22 @@
 <!-- SCRIPT -->
 <script>
 import MessageBox from '../../node_modules/mint-ui/lib/message-box'
+//接口地址
+var url = 'http://192.168.0.108:8888/mdoa/phUser/login.ph';
+// var url = 'http://192.168.0.99:8080/mdoa/phUser/login.ph';
 
 export default {
 	data() {
 		return {
-			url:'http://192.168.0.99:8080/mdoa/phUser/login.ph',
-			userName:'',
-			password:''
+			userName:'lvbing',
+			password:'123456'
 		}
 	},
 	beforeCreate () {
 		var el = this;
-		if(localStorage.getItem('userName')&&localStorage.getItem('password')){
+		if(localStorage.getItem('userName') && localStorage.getItem('password')){
 			$.ajax({
-				url: el.url,
+				url: url,
 				data:{
 					sessionId: localStorage.getItem('sessionId') || null,
 					userAccount : localStorage.getItem('userName'),
@@ -56,7 +58,7 @@ export default {
 				MessageBox('提示', '请输入密码');
 			}else{
 				$.ajax({
-					url: el.url,
+					url: url,
 					data:{
 						sessionId: localStorage.getItem('sessionId') || null,
 						userAccount : el.userName,

@@ -143,7 +143,14 @@
 			}
 		}
 	}
-
+	.mint-cell-value{
+		span{
+			white-space: nowrap; 
+			overflow:hidden;
+			text-overflow:ellipsis;
+		}
+		max-width:80%;		
+	}
 	.out-login{	
 		height:40px;
 		background-color:#fff;
