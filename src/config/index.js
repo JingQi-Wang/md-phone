@@ -15,12 +15,9 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 // 接口地址
-<<<<<<< HEAD
 var root = 'http://192.168.0.108:8888/mdoa'
 // var root = 'http://192.168.0.99:8080/mdoa'
-=======
-var root = 'http://192.168.0.95:8888/mdoa'
->>>>>>> 5acc3850c3e7b1fac6e45ee4645889ff75c7813f
+
 //全局的方法
 export default {
     //登录后的请求公用方法

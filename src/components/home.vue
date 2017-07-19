@@ -190,10 +190,6 @@ export default {
 			}
 			el.roles = str;
 		})
-<<<<<<< HEAD
-		
-=======
->>>>>>> 5acc3850c3e7b1fac6e45ee4645889ff75c7813f
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
