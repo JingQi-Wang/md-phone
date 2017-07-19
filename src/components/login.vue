@@ -18,8 +18,14 @@ var url = 'http://192.168.0.108:8888/mdoa/phUser/login.ph';
 export default {
 	data() {
 		return {
+<<<<<<< HEAD
 			userName:'lvbing',
 			password:'123456'
+=======
+			url:'http://192.168.0.95:8888/mdoa/phUser/login.ph',
+			userName:'',
+			password:''
+>>>>>>> 5acc3850c3e7b1fac6e45ee4645889ff75c7813f
 		}
 	},
 	beforeCreate () {

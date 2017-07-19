@@ -14,14 +14,16 @@
 					</div>
 				</div>
 			</div>
-			
+			<div class="logArea">
+				
+			</div>
 		</div>
 		<div class="workLogBottom">
 			<div class="myLog"  data="1" v-on:click="toPage">
 				我的日志
 			</div>
 			<div class="writeLog"  data="2" v-on:click="toPage">
-				写日子
+				写日志
 			</div>
 
 		</div>		
@@ -33,8 +35,28 @@
 export default {
 	data() {
 		return {
-
 		}
+	},
+	mounted () {
+		//渲染完以后执行，生命周期内只执行一次，初始化数据
+		//yourSelfFlag = 1;
+		var el = this;
+		el.$index.ajax(this,'/phLog/queryOneselfAndSubLog.ph',null,function(data){
+			//成功回调
+			data = data.rows;
+			var str = '';
+			for (var i = 0; i <data.length; i++) {
+			 	str += '<div class="logBox">'
+			 		+ '<div class="logOne">'
+			 		+ '<h3>'+data[i].userName+'</h3>'
+			 		+ '<h4>'+data[i].titleName+'</h4>'
+			 		+ '<div class="logContent">'+data[i].text+'</div>'
+			 		+ '<p><span class="logTime">'+data[i].logTimeStr+'</span></p>'
+			 		+ '</div>'
+			 		+ '</div>'
+			} 
+			$('.workLog .container .logArea').append(str);
+		})
 	},
 	methods: {
 		toPage:function(){

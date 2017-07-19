@@ -37,7 +37,8 @@ Vue.prototype.$api = api
 
 // 为全局设置一个全局的用户对象
 Vue.prototype.$user = new Object()
-
+// 为全局设置一个全局变量 记录log
+Vue.prototype.$log = new Object()
 // 运行
 new Vue({
   router,

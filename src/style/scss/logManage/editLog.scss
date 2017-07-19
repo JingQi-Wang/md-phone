@@ -1,0 +1,54 @@
+.editLog{
+	.container{
+		padding-bottom: 45px;
+	}
+}
+.tremBar{
+	margin-top:26px;
+	border-top:1px solid rgb(185, 185, 185);
+	border-bottom:1px solid rgb(185, 185, 185);
+	box-sizing:border-box;
+	padding:0px 26px 0 14px;
+	background:#fff;
+	font-size:22px;
+	line-height:2.4em;
+	.time{
+		float:right;
+	}
+	.title{
+		font-size:20px;
+		height:1.2em;
+		border:1px solid rgb(185, 185, 185);
+		padding: 1px 0;
+		width:10.1em;
+	}
+}
+.editArea{
+	margin-top:0px;
+	display:flex;
+	border-top:none;
+	div:nth-child(1){
+		 flex-grow: 1;
+	}
+	div:nth-child(2){
+		flex-grow: 6.2;
+		padding-top:14px;
+		overflow:hidden;
+		textarea{
+			height:21em;
+			width:99%;
+			padding:0;
+		}	
+	}
+	
+}
+.editBtn{
+	position:fixed;
+	left:0;
+	bottom:0;
+	line-height:2.8em;
+	@include w100;
+	background:rgba(255, 255, 255, 0);
+	@include word-color;
+	text-align:center;
+}
