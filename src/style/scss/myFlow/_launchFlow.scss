@@ -1,0 +1,39 @@
+.launchFlow{
+	.container{
+		.m-office{
+			float:left;
+		}
+	}
+	.applicationModel{
+		margin-top:25px;
+		background:#fff;
+		p{
+			line-height:2.8em;
+			text-indent:1em;
+		}
+		.applicationArea{
+			.applicationBar{
+				@include flex-box;
+				.applicationBlock{
+					flex-grow: 1;
+					margin-bottom:28px;
+					img{
+						display:block;
+						margin:0 auto;
+					}
+					.icon-explain{
+						color:#333;
+						text-align:center;
+						font-size:12px;
+					}
+				}
+				.hide{
+					visibility:hidden;
+				}
+			}
+		}
+	}
+	.otherApplication{
+		padding-bottom:20px;	
+	}
+}

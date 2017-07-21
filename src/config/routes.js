@@ -16,7 +16,11 @@ import workLog from '../components/logManage/workLog.vue'
 import myLog from '../components/logManage/myLog.vue'
 import editLog from '../components/logManage/editLog.vue'
 import writeLog from '../components/logManage/writeLog.vue'
-
+//引入考勤子页面
+import myFlow from '../components/myFlow/myFlow.vue'
+import lookFlow from '../components/myFlow/lookFlow.vue'
+import launchFlow from '../components/myFlow/launchFlow.vue'
+import leaveFlow from '../components/myFlow/leaveFlow.vue'
 
 // 配置路由
 export default [
@@ -83,6 +87,29 @@ export default [
       {
         path: '/writeLog',
         component: writeLog
+      }
+    ]
+  },
+  //流程路由调用
+  {
+    path: '/myFLow',
+    component: Frame,
+    children: [
+      {
+        path: '/',
+        component: myFlow
+      },
+      {
+        path: '/lookFlow',
+        component: lookFlow
+      },
+      {
+        path: '/launchFlow',
+        component: launchFlow
+      },
+      {
+        path: '/leaveFlow',
+        component: leaveFlow
       }
     ]
   }

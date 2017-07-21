@@ -1,0 +1,51 @@
+.lookFlow{
+	.container{
+		padding-bottom:44px;
+	}
+	.flowStatus{
+		border-top:1px solid rgb(77, 169, 235);
+		.flowStatus2{
+			color:black;
+		}
+	}
+	.flowTitle{
+		border-bottom:none;
+		.flowTitle1{
+			font-size:16px;
+		}
+	}
+	.logArea{
+		height:90.8%;
+	}
+}
+.flowMould{
+	padding:15px 12px;
+	border-top:1px solid rgb(77, 169, 235);
+	p{
+		line-height:20px;
+	}
+	.flowChart{
+		.flowPeople{
+			margin-top:10px;
+			display:inline-block;
+			vertical-align: middle;
+			border:1px solid rgb(77, 169, 235);
+			color:rgb(77, 169, 235);
+			border-radius:4px;
+			padding:2px 3px;
+		}
+		img{
+			margin-top:10px;
+			vertical-align: middle;
+		}
+	}
+	.examine{
+		overflow:hidden;
+		.flowPeople{
+			float:left;
+		}
+		img{
+			float:left;
+		}
+	}
+}

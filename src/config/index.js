@@ -15,7 +15,7 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 }
 // 接口地址
-var root = 'http://192.168.0.108:8888/mdoa'
+var root = 'http://192.168.0.95:8888/mdoa'
 // var root = 'http://192.168.0.99:8080/mdoa'
 
 //全局的方法

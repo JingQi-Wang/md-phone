@@ -1,0 +1,75 @@
+.myFlow{
+	.container{
+		padding-bottom:44px;
+	}
+}
+.flowArea{
+	border:1px solid rgb(77, 169, 235);
+	border-radius:5px;
+	background:#fff;
+	margin:15px 30px;
+	h3{
+		text-align:center;
+		line-height:42px;
+	}
+	.flowTitle{
+		overflow:hidden;
+		border-top:1px solid rgb(77, 169, 235);
+		border-bottom:1px solid rgb(77, 169, 235);
+		.flowTitle1{
+			float:left;
+			font-size: 12px;
+			color: #666666;
+			text-align: right;
+			min-width:25%;
+			padding-right:5%;
+			padding-top:15px;
+		}
+		.flowTitle2{
+			float:left;
+			max-width:70%;
+			padding-top:12px;
+		}
+	}
+	.flowStatus{
+		padding:15px 0;
+		overflow:hidden;
+		color: #666666;
+		.flowStatus1{
+			float:left;
+			text-align: right;
+			min-width:25%;
+			padding-right:5%;
+		}
+		.flowStatus2{
+			float:left;
+			max-width:70%;
+		}
+	}
+	.button{
+		background-color: rgb(77,169,235);
+		color: #333333;
+		text-align:center;
+		line-height:36px;
+	}
+	.examine-btn{
+		background-color: rgb(161,161,161);
+	}
+	.reject-btn{
+		background-color: rgb(255,153,102);
+	}
+}
+.flowBottom{
+	position: fixed;
+    left: 0;
+    bottom: 0;
+    line-height: 43px;
+    background-color: #fff;
+    width: 100%;
+    text-align:center;
+    border-top:1px solid #d9d9d9;
+    @include word-color
+}
+.reject-flowBottom{
+	color: rgb(255,153,102);
+}

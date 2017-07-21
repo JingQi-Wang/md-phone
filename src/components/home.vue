@@ -85,7 +85,7 @@
 								<img slot="icon" src="../static/icon/flowIcon2.svg" width="35" height="35">
 							</div>
 							<i></i>
-							<div>
+							<div data="3" v-on:click="toPage($event)">
 								<p>我的流程</p>
 								<img slot="icon" src="../static/icon/flowIcon.svg" width="30" height="30">
 							</div>
@@ -250,6 +250,8 @@ export default {
 				this.$router.push({path:'/'});
 			}else if(a == 'system'){
 				this.$router.push({path:'/system'});
+			}else if (a == '3') {
+				this.$router.push({path:'/myFlow'});
 			}
 		}
 	}
