@@ -181,6 +181,13 @@ export default {
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
 			$.extend(el.$user, data);
+			var iPhone = new RegExp('iPhone');
+			var Android = new RegExp('Android');
+			if(iPhone.test(navigator.userAgent)){
+				el.$user.phoneType = '2';
+			}else if(Android.test(navigator.userAgent)){
+				el.$user.phoneType = '1';
+			}
 			el.userName = data.userName;
 			el.departmentName = data.departmentName;
 			el.postName = data.postName;

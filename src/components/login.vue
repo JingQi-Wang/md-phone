@@ -12,8 +12,8 @@
 <script>
 import MessageBox from '../../node_modules/mint-ui/lib/message-box'
 //接口地址
-var url = 'http://192.168.0.108:8888/mdoa/phUser/login.ph';
-// var url = 'http://192.168.0.99:8080/mdoa/phUser/login.ph';
+// var url = 'http://192.168.0.108:8888/mdoa/phUser/login.ph';
+var url = 'http://192.168.0.99:8080/mdoa/phUser/login.ph';
 
 export default {
 	data() {
@@ -37,7 +37,7 @@ export default {
 				success:function(data){
 					//	ajax session 参数处理 
 					if(data.sessionId){
-						el.$index.haveSeeionId(data.sessionId)
+						localStorage.setItem('sessionId',data.sessionId);
 					}
 					if(data.success){
 						el.$router.push({path:'/home'});

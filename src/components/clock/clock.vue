@@ -34,33 +34,33 @@
 					<!-- clock box -->
 					<div class="clock-box">
 						<!-- on duty -->
-						<div class="duty bdcolor" id="on">
+						<div class="duty" id="on">
 							<div class="status">
-								<p>上班：</p>
-								<p></p>
-								<span></span>
+								<p>上班：{{ onClockTime }} &nbsp;</p>
+								<p>(上班时间 {{ onDutyTime }}) &nbsp;</p>
+								<span class="font-orange">{{ onDutyStatus }}</span>
 							</div>
-							<div class="go-clock hidden">
-								<div class="go-click blue">
-									<h2></h2>
-									<h3></h3>
+							<div class="go-clock">
+								<div class="go-click blue" v-on:click="clock">
+									<h2>{{ serverTime }}</h2>
+									<h3>{{ dutyStatus }}</h3>
 								</div>
-								<p>已进入考勤WIFI：达美印染厂行政楼</p>
+								<p>已进入考勤WIFI：{{ wifiName }}</p>
 							</div>
 						</div>
 						<!-- off duty -->
 						<div class="duty" id="off">
 							<div class="status">
-								<p>下班：</p>
-								<p></p>
-								<span></span>
+								<p>下班：{{ offClockTime }} &nbsp;</p>
+								<p>(下班时间 {{ offDutyTime }})</p>
+								<span class="font-orange">{{ offDutyStatus }}</span>
 							</div>
-							<div class="go-clock hidden">
-								<div class="go-click blue">
-									<h2></h2>
-									<h3></h3>
+							<div class="go-clock">
+								<div class="go-click blue" v-on:click="clock">
+									<h2>{{ serverTime }}</h2>
+									<h3>{{ dutyStatus }}</h3>
 								</div>
-								<p>已进入考勤WIFI：达美印染厂行政楼</p>
+								<p>已进入考勤WIFI：{{ wifiName }}</p>
 							</div>
 						</div>
 					</div>
@@ -148,6 +148,16 @@ import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
+			wifiId:'',//wifiid
+			wifiName:'',//wifi名字
+			serverTime:'',//时间
+			dutyStatus:'',//状态
+			onDutyTime:'',//上班时间
+			offDutyTime:'',//下班时间
+			onClockTime:'未打卡',//上班打卡时间
+			offClockTime:'未打卡',//下班打卡时间
+			onDutyStatus:'',//上班状态
+			offDutyStatus:'',//下班状态
 			selected:'clock',
 			active:'clock-container',
 			userName:this.$user.userName,
@@ -208,17 +218,156 @@ export default {
 			})
 		},
 		selectPicker:function(value){
-			this.showDateValue = value.Format('yyyy-MM-dd');
-		},
-		getClockState:function(){	
 			var el = this;
-			el.$index.ajax(this, '/phClock/getMyClockState.ph', null, function(data){
+			el.showDateValue = value.Format('yyyy-MM-dd');
+			if(el.showDateValue == new Date().Format('yyyy-MM-dd')){
+				this.getClockState();
+			}else{
+				$('#on .go-clock').hide();
+				$('#off .go-clock').hide()
+				$('#on').removeClass('bdcolor');
+				$('#off').removeClass('bdcolor');
+				el.$index.ajax(this, '/phClock/getMyClockDayDetail.ph', {recordDateStr:el.dateValue.Format('yyyy-MM-dd')}, function(data){
+					// 成功回调
+					console.log(data)					
+					var obj = data.attendanceRecord;
+					if(!obj){
+						el.onDutyTime = ''
+						el.offDutyTime = ''
+						el.onClockTime = ''
+						el.offClockTime = ''
+						el.onDutyStatus = ''
+						el.offDutyStatus = ''
+					}else{
+						if(obj.leaveFlag == 0){	
+							el.onDutyTime = obj.onDutyTime || ''
+							el.offDutyTime = obj.offDutyTime || ''
+							el.onClockTime = obj.clockInTime || '缺卡'
+							el.offClockTime = obj.clockOutTime || '缺卡'
+							if(obj.clockInTime > obj.onDutyTime){
+								el.onDutyStatus = '迟到'
+							}else{
+								el.onDutyStatus = ''
+							};
+							if(obj.clockOutTime < obj.offDutyTime){
+								el.offDutyStatus = '早退'
+							}else{
+								el.offDutyStatus = ''
+							}
+
+						}else if(obj.leaveFlag == 4){
+
+						}
+
+					}
+				})
+			}			
+		},
+		clock:function(){
+			var el = this;
+			var data = '';
+			if(!el.wifiId){
+				alert('外勤打卡尚未开通')
+				data = null 
+			}else{
+				var data = {
+					wifiId:el.wifiId,
+					wifiName:el.wifiName
+				}
+			}
+			el.$index.ajax(this, '/phClock/clock.ph', data, function(data){
+				el.getClockState()
+			})
+		},
+		getClockState:function(){
+			var el = this;
+			var ips = ''
+			if(el.$user.phoneType == 1){
+				ips = returnCitySN['cip'];
+			}else if(el.$user.phoneType == 2){
+				ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
+			}
+			el.$index.ajax(this, '/phClock/getMyClockState.ph', {
+				phoneType : el.$user.phoneType,
+				ips : ips
+			}, function(data){
 				// 成功回调
+				var obj = data;
+				el.wifiName = obj.wifiName;
+				el.wifiId = obj.wifiId;
 				if(obj.attendanceToday){
-					
+					var H = obj.serverTimeStr.substr(0,2);
+					var M = obj.serverTimeStr.substr(3,2);
+					var S = obj.serverTimeStr.substr(6,2);
+					el.serverTime = obj.serverTimeStr;
+					el.onDutyTime = obj.attendanceToday.onDutyTime;
+					el.offDutyTime = obj.attendanceToday.offDutyTime;
+					var time = setInterval(function(){
+						M = Number(M);
+						H = Number(H);//强制转数字
+						S++;							
+						if(S > 59){
+							S = 0;				
+							M++;
+							if(M > 59){ 
+								M = 0;						
+								H++;
+								if(H > 23){H = 0};
+							}
+						}
+						if(S < 10){
+							S = '0' + S;
+						};
+						if(M < 10){
+							M = '0' + M;
+						};
+						if(H < 10){
+							H = '0' + H
+						};
+						var html = H + ':' + M + ':' + S;				
+						el.serverTime = html;
+					},1000);
+					if(!obj.attendanceToday.clockInTime && !obj.attendanceToday.clockOutTime){
+						$('#on').addClass('bdcolor');
+						$('#on .go-clock').show();
+						if(obj.serverTimeStr < obj.attendanceToday.onDutyTime ){
+							el.dutyStatus = '上班打卡';
+						}else if(obj.serverTimeStr > obj.attendanceToday.offDutyTime){
+							$('#on .go-clock').hide();
+							$('#on').removeClass('bdcolor');
+							$('#off .go-clock').show();
+							$('#off').addClass('bdcolor');
+							el.dutyStatus = '下班打卡';
+						}else{
+							$('#on .go-click').addClass('orange')
+							el.dutyStatus = '迟到打卡';
+						}
+					}
+					if(obj.attendanceToday.clockInTime){
+						$('#off .go-clock').show();
+						$('#off').addClass('bdcolor');					
+
+						el.onClockTime = obj.attendanceToday.clockInTime;
+						el.dutyStatus = '下班打卡';
+						
+						if(obj.attendanceToday.clockInTime > obj.attendanceToday.onDutyTime){
+							el.onDutyStatus = '迟到'
+						};
+					};						
+					if(obj.attendanceToday.clockOutTime){
+						$('#off .go-clock').show();
+						$('#off').addClass('bdcolor');
+
+						el.offClockTime = obj.attendanceToday.clockOutTime;
+						el.dutyStatus = '更新打卡';
+						
+						if(obj.attendanceToday.clockOutTime < obj.attendanceToday.offDutyTime){
+							el.onDutyStatus = '早退'
+						}
+					}
 				}else{
 					Toast({
-						message: '今日加入考勤组，请您明日开始打卡!',
+						message: '今日加入考勤组,请您明日开始打卡!',
 						position: 'center',
 						duration: 2000
 					});
