@@ -1,0 +1,40 @@
+.leaveFlow{
+	.container{
+		padding-bottom:0;
+	}
+	.flowStatus{
+		border-top:1px solid rgb(77, 169, 235);
+		.flowStatus2{
+			color:black;
+		}
+	}
+	.flowTitle{
+		border-bottom:none;
+		.flowTitle1{
+			font-size:16px;
+		}
+		.reason{
+			padding-top:15px;
+			textarea{
+				height:7em;
+			}
+		}
+	}
+	.logArea{
+		height:90.8%;
+	}
+	.flowChart{
+		.addPeople{
+			border:1px solid rgb(134,134,134);
+			color:rgb(134,134,134);
+		}
+	}
+	.examine{
+		.addPeople{
+			margin-left:4px;
+		}
+	}
+	.btnArea{
+		padding:0 30px;
+	}
+}
