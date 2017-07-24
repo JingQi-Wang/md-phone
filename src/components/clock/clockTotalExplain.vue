@@ -41,7 +41,7 @@ export default {
 	},
 	methods: {
 		toPage:function(){
-			this.$router.push({path:'/clock'});
+			this.$router.push({path:'/clock?value=2'});
 		}
 	}
 }

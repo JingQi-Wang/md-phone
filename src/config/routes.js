@@ -109,7 +109,7 @@ export default [
       },
       {
         path: '/leaveFlow',
-        component: leaveFlow
+        component: writeLog
       }
     ]
   }

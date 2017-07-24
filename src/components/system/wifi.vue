@@ -15,8 +15,8 @@
 			</div>
 			<br />
 			<div>
-				<mt-cell v-bind:title="value.wifiName" v-for="(value, key) in options">
-					<button v-on:click="deleteWifi">删除</button>
+				<mt-cell v-bind:title="value.wifiName" v-bind:key="index" v-for="(value, index) in options">
+					<button v-on:click="deleteWifi" v-bind:index="index">删除</button>
 					<img slot="icon" src="../../static/icon/wifi.svg" width="24" height="24">
 				</mt-cell>
 				
@@ -38,9 +38,9 @@ export default {
 			aaa:returnCitySN["cip"],
 			options:[
 				{ wifiName:'wifi1' },
-                { wifiName:'wifi2' },
-                { wifiName:'wifi3' },
-                { wifiName:'wifi4' }
+				{ wifiName:'wifi2' },
+				{ wifiName:'wifi3' },
+				{ wifiName:'wifi4' }
 			]
 		}
 	},
@@ -54,6 +54,9 @@ export default {
 		},
 		addWifi:function(){
 			this.options.push({ wifiName:'wifi4' })
+			el.$index.ajax(this, '/phClock/set.ph', {},function(){
+
+			})
 		},
 		toPage:function(event){
 			var el = event.currentTarget;

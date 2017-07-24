@@ -16,8 +16,8 @@
 			<!-- clock base html -->
 			<div class="clock-group">
 				<div class="user">
-					<p>冯良</p>
-					<p class="group">考勤组：研发考勤组</p>
+					<p>{{ userName }}</p>
+					<p class="group">考勤组：{{ attendanceGroupName }}</p>
 				</div>
 				<div class="time-select">
 					<p v-on:click="openPicker">{{ showDateMonthValue }}</p>
@@ -27,24 +27,22 @@
 			<div class="calendar" id="calendar"></div>
 			<!-- class box -->
 			<div class="class-box">
-				<p>班次：</p>
-				<p>白班</p>
-				<p>8:30 - 17:30</p>
-				<p>&nbsp;&nbsp;</p>
-				<p>考勤组：</p>
-				<p>研发部考勤组</p>
+				<p>班次：{{ dutyType }}</p>
+				<p class="classDuty">{{ onDutyTime }} - {{ offDutyTime }}</p>
+				<p>&nbsp;&nbsp;</p>	
+				<p>考勤组：{{ attendanceGroupName }}</p>
 			</div>
 			<!-- that day -->
 			<div class="that-day">
 				<div class="duty">
 					<p>上班：&nbsp;&nbsp;</p>
-					<p>未打卡</p>
-					<span>(正常打卡)</span>
+					<p>{{ onClockTime }}</p>
+					<span>{{ onDutyStatus }}</span>
 				</div>
 				<div class="duty">
 					<p>下班：&nbsp;&nbsp;</p>
-					<p>未打卡</p>
-					<span>(正常打卡)</span>
+					<p>{{ offClockTime }}</p>
+					<span>{{ offDutyStatus }}</span>
 				</div>
 			</div>
 
@@ -79,8 +77,17 @@ var dateObj = (function(){
 export default {
 	data() {
 		return {
-			dateMonthValue:new Date(),
-			showDateMonthValue:new Date().Format('yyyy年MM月'),
+			dateMonthValue:this.$user.mouth,
+			showDateMonthValue:this.$user.mouth.Format('yyyy年MM月'),
+			userName:this.$user.userName,
+			attendanceGroupName:this.$user.attendanceGroupName,
+			dutyType:'',//什么班
+			onDutyTime:'',//上班时间
+			offDutyTime:'',//下班时间
+			onClockTime:'',//上班打卡时间
+			offClockTime:'',//下班打卡时间
+			onDutyStatus:'',//上班状态
+			offDutyStatus:''//下班状态
 		}
 	},
 	watch: {
@@ -89,19 +96,50 @@ export default {
 	mounted () {
 		// 设置calendar div中的html部分
 		this.renderHtml();
-		// 表格中显示日期
-		this.showCalendarData();
-		// 绑定事件
-		this.bindEvent();	    
+		this.getMyClockMonthForm();
+		this.getMyClockDayDetail(this.dateMonthValue.Format('yyyyMM01'))
 	},
 	methods: {
 		selectMonthPicker:function(value){
 			this.showDateMonthValue = value.Format('yyyy年MM月');
 			dateObj.setDate(new Date(value));
-			this.showCalendarData();
+			this.getMyClockMonthForm();
+		},
+		getMyClockMonthForm:function(){
+			var el = this;
+			el.$index.ajax(this, '/phClock/getMyClockMonthForm.ph', {balanceMonth:el.dateMonthValue.Format('yyyy-MM')}, function(data){
+				// 成功回调
+				// 表格中显示日期
+				el.showCalendarData();
+				// 绑定事件
+				el.bindEvent();
+
+				for(var i=0 ; i<data.clockDayForms.length ; i++){
+					var tds = $('#calendarTable .currentMonth');
+					for(var j = 0; j < tds.length; j++) {
+						var str = data.clockDayForms[i].recordDateStr
+						var timeStr = str.substr(0, 4) + str.substr(5, 2) + str.substr(8, 2)
+						if(timeStr == tds.eq(j).attr('data')){
+							if(data.clockDayForms[i].leaveFlag == 0){
+								if(data.clockDayForms[i].beLateFlag == 0 && data.clockDayForms[i].leaveEarlyFlag == 0){
+									tds.eq(j).find('i').addClass('blue')
+								}else{
+									tds.eq(j).find('i').addClass('orange')
+								}
+							}else{
+								if(data.clockDayForms[i].clockInTime || data.clockDayForms[i].clockOUtTime){
+									tds.eq(j).find('i').addClass('blue')
+								}
+							}
+
+						}
+					}
+				}
+
+			})
 		},
 		toPage:function(){
-			this.$router.push({path:'/clock'});
+			this.$router.push({path:'/clock?value=2'});
 		},
 		openPicker:function(){
 			this.$refs.monthPicker.open();
@@ -150,25 +188,24 @@ export default {
 			var _firstDay = new Date(_year, _month - 1, 1);// 当前月第一天
 
 			for(var i = 0; i < _tds.length; i++) {
-
 				var _thisDay = new Date(_year, _month - 1, i + 1 - _firstDay.getDay());
 				var _thisDayStr = this.getDateStr(_thisDay);
 
 				if(i - _firstDay.getDay() == 0){
-					_tds[i].innerHTML = '<div class="current">' + _thisDay.getDate() + '</div>';
+					_tds[i].innerHTML = '<div class="current">' + _thisDay.getDate() + '</div><i></i>';
 				}else{
-					_tds[i].innerHTML = '<div>' + _thisDay.getDate() + '</div>';
+					_tds[i].innerHTML = '<div>' + _thisDay.getDate() + '</div><i></i>';
 				}
 				_tds[i].setAttribute('data', _thisDayStr);
 
 				if(_thisDayStr == this.getDateStr(new Date())) {// 当前天
 					if(_thisDayStr.substr(0, 6) == this.getDateStr(_firstDay).substr(0, 6)){
-						_tds[i].className = 'currentDay';					
+						_tds[i].className = 'currentDay';
 					}else{
 						_tds[i].className = 'otherMonth';
 					}
 				}else if(_thisDayStr.substr(0, 6) == this.getDateStr(_firstDay).substr(0, 6)) {
-					_tds[i].className = 'currentMonth';// 当前月
+					_tds[i].className = 'currentMonth';// 当前月					
 				}else {// 其他月
 					_tds[i].className = 'otherMonth';
 				}
@@ -176,15 +213,70 @@ export default {
 		},
 		bindEvent:function(){
 			//给每个td绑定点击事件
+			var el = this;
 			var table = document.getElementById("calendarTable");
 			var tds = table.getElementsByTagName('td');
 			for(var i = 0; i < tds.length; i++) {
 				this.addEvent(tds[i], 'click', function(event){
-					var el = event.currentTarget;
+					var ele = event.currentTarget;
 					$('#calendarTable td').find('div').removeClass('current');
-					$(el).find('div').addClass('current');
+					$(ele).find('div').addClass('current');
+					el.getMyClockDayDetail($(ele).attr('data'))
 				});
 			}
+		},
+		getMyClockDayDetail:function(recordDateStr){
+			var el = this;
+			el.$index.ajax(this, '/phClock/getMyClockDayDetail.ph', {
+				recordDateStr:recordDateStr.substr(0,4)+'-'+recordDateStr.substr(4,2)+ '-' +recordDateStr.substr(6,2),
+				isLeave:1
+			}, function(data){
+				// 成功回调
+				if(data.attendanceRecord){
+					$('.classDuty').show();
+					$('.that-day').show();					
+					if(data.attendanceRecord.leaveFlag == 0){
+						el.dutyType = '';
+						el.onDutyTime = data.attendanceRecord.onDutyTime
+						el.offDutyTime = data.attendanceRecord.offDutyTime
+						el.onClockTime = data.attendanceRecord.clockInTime || '缺卡'
+						el.offClockTime = data.attendanceRecord.clockOutTime || '缺卡'
+						if(data.attendanceRecord.beLateFlag == 0){
+							el.onDutyStatus = '（正常打卡）'
+						}else if(data.attendanceRecord.beLateFlag == 1){
+							el.onDutyStatus = '（迟到）'
+						}else{
+							el.onDutyStatus = ''
+						}
+						if(data.attendanceRecord.leaveEarlyFlag == 0){
+							el.offDutyStatus = '（正常打卡）'
+						}else if(data.attendanceRecord.leaveEarlyFlag == 1){
+							el.offDutyStatus = '（早退）'
+						}else{
+							el.offDutyStatus = ''
+						}
+					}else{
+						if(data.attendanceRecord.leaveFlag == 3){
+							el.dutyType = '外勤';
+						}else if(data.attendanceRecord.leaveFlag == 4){
+							el.dutyType = '休息';
+						}else{
+							el.dutyType = '请假';
+						}
+						$('.classDuty').hide();
+						el.onDutyTime = data.attendanceRecord.onDutyTime
+						el.offDutyTime = data.attendanceRecord.offDutyTime
+						el.onClockTime = data.attendanceRecord.clockInTime || ''
+						el.offClockTime = data.attendanceRecord.clockOutTime || ''
+					}
+
+					
+				}else{
+					$('.that-day').hide();
+					$('.classDuty').hide();
+					el.dutyType = '未安排班次'
+				}
+			})
 		},
 		addEvent:function(dom, eType, func){
 			if(dom.addEventListener) {  // DOM 2.0

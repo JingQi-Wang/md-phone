@@ -241,7 +241,7 @@ export default {
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
 				if(this.$user.attendanceGroupId){
-					this.$router.push({path:'/clock'});
+					this.$router.push({path:'/clock?value=1'});
 				}else{
 					Toast({
 						message: '还未加入考勤组,请加入后再打卡',
