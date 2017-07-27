@@ -7,7 +7,7 @@
 			<mt-tab-container-item id="clock-container">
 				<div class="container">
 					<div class="title-box">
-						<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">							
+						<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">		
 						<div class="m-office">
 							考勤打卡
 						</div>
@@ -456,38 +456,6 @@ export default {
 					});
 				}
 			})
-		},
-		showPosition:function(position){
-			// var el = this;
-			// alert(position.coords.latitude)
-			// var latlon = position.coords.latitude+','+position.coords.longitude;
-			// el.wifiName = texts
-
-			// var img_url="http://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false";
-			// document.getElementById("aaa").innerHTML="<img src='"+img_url+"'>";
-
-			// var url = 'http://maps.google.cn/maps/api/geocode/json?latlng='+latlon+'&language=CN';
-			// $.ajax({ 
-			// 	type: "GET", 
-			// 	url: url, 
-			// 	beforeSend: function(){ 
-			// 		el.wifiName = '正在定位'
-			// 	}, 
-			// 	success: function (json) { 
-			// 		if(json.status=='OK'){ 
-			// 			var results = json.results;
-			// 			$.each(results,function(index,array){
-			// 				if(index==0){ 
-			// 					el.wifiName = array['formatted_address']
-			// 				}
-			// 			}); 
-			// 		} 
-			// 	}, 
-			// 	error: function (XMLHttpRequest, textStatus, errorThrown) { 
-			// 		el.wifiName = "地址位置获取失败"
-			// 	} 
-			// });
-
 		},
 		openPicker:function(event){
 			var el = event.currentTarget;
