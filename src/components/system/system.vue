@@ -57,7 +57,7 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){
-				this.$router.push({path:'/home'});
+				this.$router.push({path:'/'});
 				
 			}
 		}			

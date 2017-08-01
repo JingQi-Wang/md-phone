@@ -326,7 +326,8 @@ export default {
 				ips = returnCitySN['cip'];
 				// ips = '183.129110.238'
 			}else if(el.$user.phoneType == 2){
-				ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
+				ips = returnCitySN['cip'];
+				// ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
 			}
 			el.$index.ajax(this, '/phClock/getMyClockState.ph', {
 				phoneType : el.$user.phoneType,
@@ -471,7 +472,7 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往home
-				this.$router.push({path:'/home'});
+				this.$router.push({path:'/'});
 			}
 		},
 		changeImg:function(val){

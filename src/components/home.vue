@@ -1,7 +1,6 @@
 //home.vue
 <template>
 	<div class="home">
-		<div>{{ aaa }}</div>
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="message-container">
@@ -128,9 +127,9 @@
 						</mt-cell>
 					</div>
 					<br />
-					<div class="out-login">
+					<!-- <div class="out-login">
 						<a data="logout" v-on:click="toPage">退出登录</a>
-					</div>				
+					</div> -->				
 				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
@@ -166,7 +165,6 @@ import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
-			aaa:'',
 			selected:'work',
 			active:'work-container',
 			userName:'',
@@ -251,15 +249,17 @@ export default {
 				}
 			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
-			}else if(a == 'logout'){
-				localStorage.removeItem('userName');
-				localStorage.removeItem('password');
-				this.$router.push({path:'/'});
 			}else if(a == 'system'){
 				this.$router.push({path:'/system'});
 			}else if (a == '3') {
 				this.$router.push({path:'/myFlow'});
 			}
+			// else if(a == 'logout'){
+			// 	localStorage.removeItem('userName');
+			// 	localStorage.removeItem('password');
+			// 	this.$router.push({path:'/'});
+			// }
+			
 		}
 	}
 }

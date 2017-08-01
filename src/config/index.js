@@ -16,7 +16,7 @@ Date.prototype.Format = function (fmt) {
 }
 // 接口地址
 
-var root = 'http://192.168.0.108:8888/mdoa'
+var root = 'http://centojs.com/mdoa'
 
 
 //全局的方法
@@ -42,10 +42,10 @@ export default {
                         succeed(data.message)
                     }
                 }else{
-                    localStorage.removeItem('userName');
-                    localStorage.removeItem('password');
+                    // localStorage.removeItem('userName');
+                    // localStorage.removeItem('password');
                     alert(data.message);
-                    el.$router.push({path:'/'});
+                    // el.$router.push({path:'/'});
                 }
             }
 
