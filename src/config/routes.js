@@ -16,20 +16,23 @@ import workLog from '../components/logManage/workLog.vue'
 import myLog from '../components/logManage/myLog.vue'
 import editLog from '../components/logManage/editLog.vue'
 import writeLog from '../components/logManage/writeLog.vue'
-//引入考勤子页面
+//引入我的流程子页面
 import myFlow from '../components/myFlow/myFlow.vue'
 import lookFlow from '../components/myFlow/lookFlow.vue'
 import launchFlow from '../components/myFlow/launchFlow.vue'
 import leaveFlow from '../components/myFlow/leaveFlow.vue'
-
+//引入审批子页面
+import examine from '../components/examine/examine.vue'
+import flowExamine from '../components/examine/flowExamine.vue'
+import examining from '../components/examine/examining.vue'
 // 配置路由
 export default [
-  // {
-  //   path: '/',
-  //   component: login
-  // },
   {
     path: '/',
+    component: login
+  },
+  {
+    path: '/home',
     component: home
   },
   // 系统设置
@@ -109,8 +112,27 @@ export default [
       },
       {
         path: '/leaveFlow',
-        component: writeLog
+        component: leaveFlow
       }
+    ]
+  },
+  //审批路由调用
+  {
+    path: '/examine',
+    component: Frame,
+    children: [
+      {
+        path: '/',
+        component: examine
+      },
+      {
+        path: '/flowExamine',
+        component: flowExamine
+      },
+      {
+        path: '/examining',
+        component: examining
+      },
     ]
   }
 ]
