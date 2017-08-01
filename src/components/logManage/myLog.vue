@@ -59,7 +59,6 @@ export default {
 					workOfficeLogId:$(el).find('.logOne').attr('id')
 				}
 				$.extend(this.$log,info);
-				console.log(this.$log);
 				this.$router.push({path:'/editLog'});
 			}
 		},

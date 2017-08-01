@@ -16,13 +16,13 @@
 			</div>
 			<div class="logArea">
 				<div class="flowArea">
-					<h3>请假流程</h3>
+					<h3>{{ leaveType }}</h3>
 					<div class="flowTitle">
 						<div  class="flowTitle1">
 							申请人
 						</div>
 						<div  class="flowTitle2">
-							冯良
+							{{ userName }}
 						</div>
 					</div>
 					<div class="flowTitle">
@@ -30,7 +30,7 @@
 							标题
 						</div>
 						<div  class="flowTitle2">
-							今天出走,只为明日,能与荣耀同行!
+							{{ title }}
 						</div>
 					</div>
 					<div class="flowStatus">
@@ -38,7 +38,7 @@
 							开始时间
 						</div>
 						<div  class="flowStatus2">
-							2016-09-09 14:30
+							{{ startTime }}
 						</div>
 					</div>
 					<div class="flowStatus">
@@ -46,23 +46,7 @@
 							结束时间
 						</div>
 						<div  class="flowStatus2">
-							2016-09-09 14:30
-						</div>
-					</div>
-					<div class="flowStatus">
-						<div  class="flowStatus1">
-							实际开始
-						</div>
-						<div  class="flowStatus2">
-							打卡
-						</div>
-					</div>
-					<div class="flowStatus">
-						<div  class="flowStatus1">
-							实际结束
-						</div>
-						<div  class="flowStatus2">
-							打卡
+							{{ endTime }}
 						</div>
 					</div>
 					<div class="flowTitle">
@@ -70,7 +54,7 @@
 							请假原因
 						</div>
 						<div  class="flowTitle2">
-							今天出走,只为明日,能与荣耀同行!
+							{{ reason }}
 						</div>
 					</div>
 				</div>
@@ -95,13 +79,13 @@
 						</div>
 					</div>
 				</div>
-				<div class="flowArea">
+				<div class="flowArea" v-for="item of items">
 					<div class="flowStatus" style="border-top:none;">
 						<div  class="flowStatus1">
 							审批人
 						</div>
 						<div  class="flowStatus2">
-							风声,思念铃
+							{{ item.executorName }}
 						</div>
 					</div>
 					<div class="flowStatus">
@@ -109,27 +93,88 @@
 							审批意见
 						</div>
 						<div  class="flowStatus2">
-							有点假的不好弄
+							{{ item.executorIdea }}
 						</div>
 					</div>
-					<div class="button reject-btn">
+					<div class="button examine-btn" v-if="item.examineStatus == 1">
+						待审
+					</div>
+					<div class="button" v-if="item.examineStatus == 2">
+						通过
+					</div>
+					<div class="button reject-btn" v-if="item.examineStatus == 3">
 						驳回
+					</div>
+					<div class="button reject-btn" v-if="item.examineStatus == 4">
+						撤回
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="flowBottom reject-flowBottom">
-			叮一下/驳回
+		<div class="flowBottom" v-on:click="ding">
+			叮一下
 		</div>
 	</div>
 </template>
 
 <!-- script -->
 <script>
+import arrow from '../../static/icon/arrow.svg';
+import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
+			items:[],
+			leaveType:'',
+			userName:'',
+			title:'',
+			startTime:'',
+			endTime:'',
+			reason:''
 		}
+	},
+	mounted () {
+		var that = this;
+		var info = {
+			processRecordId:this.$leaveType.processRecordId
+		}
+		that.$index.ajax(that,'/phMyRelated/getProcessFormMessage.ph',info,function(data){
+			that.leaveType = data.leaveType;
+			that.userName = data.leaveType;
+			that.title = data.title;
+			that.startTime = data.startTime;
+			that.endTime = data.endTime;
+			that.reason = data.reason;
+		});
+		that.$index.ajax(that,'/phMyRelated/getProcessExecutor.ph',info,function(data){
+			excuteUserHead = data.excuteUserHead;
+			var str = '';
+			for (var i = excuteUserHead; i ; i = i.nextTask) {
+			 	str += '<span class="flowPeople"'+i.executorId+'>'+i.executorName+'</span>';
+			 	str += '<img slot="icon" src="../../static/icon/arrow.svg" width="24" height="24" >'
+			}; 
+			$('.lookFlow .flowArea .examine').append(str);
+			$('.lookFlow .flowArea .examine img:last').remove();
+		});
+		that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
+			that.items = data;
+			var status = data[data.length-1].examineStatus;
+			if (status == '1') {
+				$('.lookFlow .flowBottom').attr('status','1');
+				$('.lookFlow .flowBottom').text('叮一下');
+			}else if(status == '2'){
+				$('.lookFlow .flowBottom').attr('status','2');
+				$('.lookFlow .flowBottom').text('已通过');
+			}else if(status == '3'){
+				$('.lookFlow .flowBottom').attr('status','3');
+				$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+				$('.lookFlow .flowBottom').text('已被驳回');
+			}else if(status == '4'){
+				$('.lookFlow .flowBottom').attr('status','4');
+				$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+				$('.lookFlow .flowBottom').text('已被撤回');
+			}
+		});
 	},
 	methods: {
 		toPage:function(event){
@@ -141,6 +186,13 @@ export default {
 		},
 		refresh:function(){
 			window.location.reload()
+		},
+		ding:function(event){
+			var el = event.currentTarget;
+			var status = $(el).attr('status');
+			if(status == '1'){
+
+			}
 		}
 	}
 }

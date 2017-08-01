@@ -17,7 +17,7 @@
 //base
 @import "base/reset.scss";
 @import "base/base.scss";
-
+@import "scss/plugin/form.scss";
 
 //components
 @import "scss/home.scss";
@@ -34,3 +34,6 @@
 @import "scss/myFlow/lookFlow.scss";
 @import "scss/myFlow/launchFlow.scss";
 @import "scss/myFlow/leaveFlow.scss";
+
+@import "scss/examine/examine.scss";
+@import "scss/examine/examining.scss";

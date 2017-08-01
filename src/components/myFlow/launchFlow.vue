@@ -72,7 +72,15 @@
 export default {
 	data() {
 		return {
+			leaveType:''
 		}
+	},
+	mounted () {
+		var that = this;
+		that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
+			that.leaveType = data.rows;
+			//console.log(that.leaveType);
+		});
 	},
 	methods: {
 		toPage:function(event){
@@ -83,6 +91,10 @@ export default {
 			}else if (a == 1) {
 				this.$router.push({path:'/lookFlow'});
 			}else if (a == 2) {
+				var info = {
+					leaveType:this.leaveType[1].optionKey
+				}
+				$.extend(this.$leaveType,info);				
 				this.$router.push({path:'/leaveFlow'});
 			}
 		}

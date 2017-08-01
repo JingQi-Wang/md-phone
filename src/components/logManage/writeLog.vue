@@ -1,4 +1,4 @@
-//editLog.vue
+//writeLog.vue
 <template>
 	<div class="writeLog">	
 		<!-- 内容 -->
@@ -46,7 +46,7 @@
 <!-- script -->
 <script>
 
-import MessageBox from '../../../node_modules/mint-ui/lib/message-box'
+import { MessageBox } from 'mint-ui';
 
 export default {
 	data() {

@@ -15,25 +15,34 @@
 				</div>
 			</div>
 			<div class="logArea">
-				<div class="flowArea">
-					<h3>请假流程</h3>
+				<div class="flowArea" v-for="item of items">
+					<h3>{{ item.processTypeName }}</h3>
 					<div class="flowTitle">
 						<div  class="flowTitle1">
 							标题
 						</div>
 						<div  class="flowTitle2">
-							把手机贵BNDVAUSDHVWYA
+							{{ item.title }}
 						</div>
 					</div>
 					<div class="flowStatus">
 						<div  class="flowStatus1">
 							审批状态
 						</div>
-						<div  class="flowStatus2">
-							把手机贵BNDVAUSDHVWYA
+						<div  class="flowStatus2" v-if="item.executeStatus == 1">
+							审批中
+						</div>
+						<div  class="flowStatus2 poss" v-if="item.executeStatus == 2">
+							通过
+						</div>
+						<div  class="flowStatus2 reject" v-if="item.executeStatus == 3">
+							驳回
+						</div>
+						<div  class="flowStatus2" v-if="item.executeStatus == 4">
+							撤回
 						</div>
 					</div>
-					<div class="button" data="1" v-on:click="toPage">查看</div>
+					<div class="button" v-bind:id="item.processRecordId" data="1" v-on:click="toPage">查看</div>
 				</div>
 			</div>
 		</div>
@@ -48,7 +57,19 @@
 export default {
 	data() {
 		return {
+			items:[]
 		}
+	},
+	mounted () {
+		var info = {
+			userId : this.$user.userId,
+			userName : this.$user.userName
+		}
+		var that = this;
+		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',info,function(data){
+			console.log(data);
+			that.items = data.rows;
+		});
 	},
 	methods: {
 		toPage:function(event){
@@ -57,6 +78,10 @@ export default {
 			if (a == 0) {
 				this.$router.push({path:'/home'});
 			}else if (a == 1) {
+				var info = {
+					processRecordId:$(el).attr('id')
+				}
+				$.extend(this.$leaveType,info);
 				this.$router.push({path:'/lookFlow'});
 			}else if (a == 2) {
 				this.$router.push({path:'/launchFlow'});

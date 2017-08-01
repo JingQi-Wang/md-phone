@@ -1,0 +1,32 @@
+.examining{
+	.container{
+		padding-bottom: 48px;
+	}
+	.examiningBox{
+		height:90.8%;
+		padding: 15px 30px;
+		box-sizing:border-box;
+		.examiningBlock{
+			border: 1px solid rgb(153,153,153);
+		    border-radius: 12px;
+		    background: #fff;
+		    height:100%;
+		    box-sizing:border-box;
+		    padding:0px 20px 20px;
+		    h1{
+		    	font-size:20px;
+		    	line-height:40px;
+		    }
+		    textarea{
+		    	height:90%;
+		    	width:99%;
+		    	padding:0;
+		    }
+		}
+	}
+	.workLogBottom{
+		.writeLog{
+			color: #ff9966;
+		}
+	}	
+}

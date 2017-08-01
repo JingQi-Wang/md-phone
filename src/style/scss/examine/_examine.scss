@@ -1,0 +1,19 @@
+.examine{
+	.container{
+		padding-bottom:0px;
+	}
+	.message-box{
+		padding-top:0px;
+		height:91.5%;
+		.go-to{
+			font-size: 0.8em;
+		    line-height: 1em;
+		    color: #26a2ff;
+		    text-align: center;
+		    display: block;
+		    width: 100%;
+		    padding: 5px 0;
+		    border-top: 1px dotted #d9d9d9;
+		}
+	}
+}
