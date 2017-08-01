@@ -27,10 +27,6 @@ import flowExamine from '../components/examine/flowExamine.vue'
 import examining from '../components/examine/examining.vue'
 // 配置路由
 export default [
-  // {
-  //   path: '/',
-  //   component: login
-  // },
   {
     path: '/',
     component: home
