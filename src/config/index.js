@@ -40,6 +40,8 @@ export default {
                         succeed(data.returnObj)
                     }else if(data.message){
                         succeed(data.message)
+                    }else{
+                        succeed(null)
                     }
                 }else{
                     // localStorage.removeItem('userName');
