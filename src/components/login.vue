@@ -10,16 +10,16 @@
 </template>
 <!-- SCRIPT -->
 <script>
-import MessageBox from '../../node_modules/mint-ui/lib/message-box'
+import { MessageBox } from 'mint-ui';
 //接口地址
-var url = 'http://192.168.0.99:8888/mdoa/phUser/login.ph';
+var url = 'http://192.168.0.108:8888/mdoa/phUser/login.ph';
 
 
 export default {
 	data() {
 		return {
-			userName:'lvbing',
-			password:'123456'
+			userName:'',
+			password:''
 		}
 	},
 	beforeCreate () {
@@ -82,7 +82,9 @@ export default {
 						MessageBox('提示', '登录失败');
 					}
 				})
-			}			
+			}
+
+
 		}
 
 	}

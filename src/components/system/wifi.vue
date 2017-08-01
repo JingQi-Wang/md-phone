@@ -15,8 +15,10 @@
 			</div>
 			<br />
 			<div>
-				<mt-cell v-bind:title="value.wifiName" v-for="(value, key) in options">
-					<button v-on:click="deleteWifi">删除</button>
+				<mt-cell v-bind:title="value.wifiName" v-bind:key="index" v-for="(value, index) in options">
+					<button v-on:click="updateWifi" v-bind:id="value.wifiId">更新</button>
+					&nbsp;&nbsp;
+					<button v-on:click="deleteWifi" v-bind:id="value.wifiId">删除</button>
 					<img slot="icon" src="../../static/icon/wifi.svg" width="24" height="24">
 				</mt-cell>
 				
@@ -32,32 +34,81 @@
 
 <!-- SCRIPT -->
 <script>
+import { MessageBox } from 'mint-ui';
+import { Toast } from 'mint-ui';
+
 export default {
 	data() {
 		return {
 			aaa:returnCitySN["cip"],
 			options:[
-				{ wifiName:'wifi1' },
-                { wifiName:'wifi2' },
-                { wifiName:'wifi3' },
-                { wifiName:'wifi4' }
+				
 			]
 		}
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
-		
+		this.getWifi();
 	},
 	methods: {
-		deleteWifi:function(){
-			this.options.splice(0,1);
+		getWifi:function(){
+			var el = this;			
+			el.$index.ajax(this, '/phClock/getWifi.ph', null, function(data){
+				el.options = data;
+			})
 		},
 		addWifi:function(){
-			this.options.push({ wifiName:'wifi4' })
+			MessageBox.prompt('请输入wifi名称').then( ({ value, action }) => {
+				var el = this;
+				el.$index.ajax(this, '/phClock/setWifi.ph', {
+					wifiName:value,
+					ips:returnCitySN['cip'],
+					phoneType:el.$user.phoneType
+				},function(data){
+					Toast({
+						message:data,
+						duration:2000
+					});
+					el.getWifi();
+				})
+			})
+
+		},
+		updateWifi:function(){
+			var ele = event.currentTarget;
+			var a = $(ele).attr('id');
+			MessageBox.confirm('确定要更新该wifi吗?').then(action => {
+				var el = this;
+				el.$index.ajax(this, '/phClock/updateWifi.ph', {
+					wifiId:a,
+					ips:returnCitySN['cip'],
+					phoneType:el.$user.phoneType
+				},function(data){
+					
+				})
+			})
+
+		},
+		deleteWifi:function(event){
+			var ele = event.currentTarget;
+			var a = $(ele).attr('id');
+			MessageBox.confirm('确定删除该wifi吗?').then(action => {
+				var el = this;
+				el.$index.ajax(this, '/phClock/deleteWifi.ph', {
+					wifiId:a
+				},function(data){
+					Toast({
+						message:data,
+						duration:2000
+					});
+					el.getWifi();
+				})
+			})
+
 		},
 		toPage:function(event){
-			var el = event.currentTarget;
-			var a = $(el).attr('data');
+			var ele = event.currentTarget;
+			var a = $(ele).attr('data');
 			if(a == 0){
 				this.$router.push({path:'/system'});
 				

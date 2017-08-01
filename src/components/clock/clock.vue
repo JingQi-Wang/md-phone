@@ -7,7 +7,7 @@
 			<mt-tab-container-item id="clock-container">
 				<div class="container">
 					<div class="title-box">
-						<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">							
+						<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">		
 						<div class="m-office">
 							考勤打卡
 						</div>
@@ -29,7 +29,7 @@
 					</div>
 					<!-- remind -->
 					<div class="remind">
-						<p>下班了，工作了一天早点休息！</p>
+						<p>{{ remind }}</p>
 					</div>
 					<!-- clock box -->
 					<div class="clock-box">
@@ -45,14 +45,14 @@
 									<h2>{{ serverTime }}</h2>
 									<h3>{{ dutyStatus }}</h3>
 								</div>
-								<p>已进入考勤WIFI：{{ wifiName }}</p>
+								<p>{{ wifiName }}</p>
 							</div>
 						</div>
 						<!-- off duty -->
 						<div class="duty" id="off">
 							<div class="status">
 								<p>下班：{{ offClockTime }} &nbsp;</p>
-								<p>(下班时间 {{ offDutyTime }})</p>
+								<p>(下班时间 {{ offDutyTime }}) &nbsp;</p>
 								<span class="font-orange">{{ offDutyStatus }}</span>
 							</div>
 							<div class="go-clock">
@@ -60,11 +60,10 @@
 									<h2>{{ serverTime }}</h2>
 									<h3>{{ dutyStatus }}</h3>
 								</div>
-								<p>已进入考勤WIFI：{{ wifiName }}</p>
+								<p>{{ wifiName }}</p>
 							</div>
 						</div>
 					</div>
-				
 				</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="statistics-container">
@@ -93,7 +92,7 @@
 					<!-- link to -->
 					<div class="link-to">
 						<router-link class="link-explain" to="/clockTotalExplain">统计说明</router-link>
-						<router-link class="link-calendar" to="/clockTotal">打卡月历</router-link>
+						<router-link class="link-calendar" to="/clockTotal?">打卡月历</router-link>
 						<img slot="icon" src="../../static/icon/clockIcon.svg" width="26" height="26">
 					</div>
 					<!-- total -->
@@ -148,6 +147,9 @@ import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
+			remind:'',
+			isLeave:null,
+			wifiValue:'',
 			wifiId:'',//wifiid
 			wifiName:'',//wifi名字
 			serverTime:'',//时间
@@ -158,8 +160,8 @@ export default {
 			offClockTime:'未打卡',//下班打卡时间
 			onDutyStatus:'',//上班状态
 			offDutyStatus:'',//下班状态
-			selected:'clock',
-			active:'clock-container',
+			selected:'',
+			active:'',
 			userName:this.$user.userName,
 			attendanceGroupName:this.$user.attendanceGroupName,
 			dateValue: new Date(),
@@ -177,6 +179,14 @@ export default {
 	mounted () {
 		this.getMyClockMonthForm();
 		this.getClockState();
+		this.$user.mouth = this.dateMonthValue
+		if(this.GetQueryString() == 1){
+			this.selected = 'clock'
+			this.active = 'clock-container'
+		}else if(this.GetQueryString() == 2){
+			this.selected = 'statistics'
+			this.active = 'statistics-container'
+		}
 	},
 	watch: {
 		selected: function (val) {
@@ -191,8 +201,14 @@ export default {
 		}
 	},
 	methods: {
+		GetQueryString:function (){
+			var str=location.href; //取得整个地址栏
+			var num=str.indexOf("?")
+			return str.substring(num + 7,num + 8);
+		},
 		selectMonthPicker:function(value){
 			this.showDateMonthValue = value.Format('yyyy年MM月');
+			this.$user.mouth = value;
 			this.getMyClockMonthForm();
 		},
 		getMyClockMonthForm:function(){
@@ -221,6 +237,8 @@ export default {
 			var el = this;
 			el.showDateValue = value.Format('yyyy-MM-dd');
 			if(el.showDateValue == new Date().Format('yyyy-MM-dd')){
+				$('#on').show()
+				$('#off').show()
 				this.getClockState();
 			}else{
 				$('#on .go-clock').hide();
@@ -229,9 +247,11 @@ export default {
 				$('#off').removeClass('bdcolor');
 				el.$index.ajax(this, '/phClock/getMyClockDayDetail.ph', {recordDateStr:el.dateValue.Format('yyyy-MM-dd')}, function(data){
 					// 成功回调
-					console.log(data)					
 					var obj = data.attendanceRecord;
 					if(!obj){
+						$('#on').hide()
+						$('#off').hide()
+						el.remind = '当天没有打卡记录！'
 						el.onDutyTime = ''
 						el.offDutyTime = ''
 						el.onClockTime = ''
@@ -239,7 +259,10 @@ export default {
 						el.onDutyStatus = ''
 						el.offDutyStatus = ''
 					}else{
-						if(obj.leaveFlag == 0){	
+						$('#on').show()
+						$('#off').show()
+						if(obj.leaveFlag == 0){
+							el.remind = '当日应上班！'
 							el.onDutyTime = obj.onDutyTime || ''
 							el.offDutyTime = obj.offDutyTime || ''
 							el.onClockTime = obj.clockInTime || '缺卡'
@@ -254,9 +277,24 @@ export default {
 							}else{
 								el.offDutyStatus = ''
 							}
-
 						}else if(obj.leaveFlag == 4){
-
+							el.remind = '当日休息哦！'
+							el.onDutyTime = obj.onDutyTime || ''
+							el.offDutyTime = obj.offDutyTime || ''
+							el.onClockTime = obj.clockInTime || ''
+							el.offClockTime = obj.clockOutTime || ''
+						}else if(obj.leaveFlag == 3){
+							el.remind = '当日出了外勤哦！'
+							el.onDutyTime = obj.onDutyTime || ''
+							el.offDutyTime = obj.offDutyTime || ''
+							el.onClockTime = obj.clockInTime || ''
+							el.offClockTime = obj.clockOutTime || ''
+						}else{
+							el.remind = '当日请假了哦！'
+							el.onDutyTime = obj.onDutyTime || ''
+							el.offDutyTime = obj.offDutyTime || ''
+							el.onClockTime = obj.clockInTime || ''
+							el.offClockTime = obj.clockOutTime || ''
 						}
 
 					}
@@ -266,13 +304,15 @@ export default {
 		clock:function(){
 			var el = this;
 			var data = '';
-			if(!el.wifiId){
-				alert('外勤打卡尚未开通')
-				data = null 
-			}else{
-				var data = {
+			if(el.isLeave == 1){				
+				data = {
+					outLocation:el.wifiId,
+					outAddress:el.wifiValue
+				}
+			}else if(el.isLeave == 0){
+				data = {
 					wifiId:el.wifiId,
-					wifiName:el.wifiName
+					wifiName:el.wifiValue
 				}
 			}
 			el.$index.ajax(this, '/phClock/clock.ph', data, function(data){
@@ -284,8 +324,10 @@ export default {
 			var ips = ''
 			if(el.$user.phoneType == 1){
 				ips = returnCitySN['cip'];
+				// ips = '183.129110.238'
 			}else if(el.$user.phoneType == 2){
-				ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
+				ips = returnCitySN['cip'];
+				// ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
 			}
 			el.$index.ajax(this, '/phClock/getMyClockState.ph', {
 				phoneType : el.$user.phoneType,
@@ -293,8 +335,14 @@ export default {
 			}, function(data){
 				// 成功回调
 				var obj = data;
-				el.wifiName = obj.wifiName;
-				el.wifiId = obj.wifiId;
+				//若wifiId和name为空，则外勤打卡，否则正常打卡
+				if(obj.wifiName && obj.wifiId){
+					el.isLeave = 0;					
+					el.wifiName = '已进入考勤WIFI：' + obj.wifiName;
+					el.wifiValue = obj.wifiName;
+					el.wifiId = obj.wifiId;
+					$('.go-click').removeClass('orange');
+				}
 				if(obj.attendanceToday){
 					var H = obj.serverTimeStr.substr(0,2);
 					var M = obj.serverTimeStr.substr(3,2);
@@ -302,6 +350,7 @@ export default {
 					el.serverTime = obj.serverTimeStr;
 					el.onDutyTime = obj.attendanceToday.onDutyTime;
 					el.offDutyTime = obj.attendanceToday.offDutyTime;
+					clearInterval(time);
 					var time = setInterval(function(){
 						M = Number(M);
 						H = Number(H);//强制转数字
@@ -324,12 +373,13 @@ export default {
 						if(H < 10){
 							H = '0' + H
 						};
-						var html = H + ':' + M + ':' + S;				
+						var html = H + ':' + M + ':' + S;
 						el.serverTime = html;
 					},1000);
 					if(!obj.attendanceToday.clockInTime && !obj.attendanceToday.clockOutTime){
 						$('#on').addClass('bdcolor');
 						$('#on .go-clock').show();
+						el.remind = '一日之计在于晨，新的一天新的开始！'
 						if(obj.serverTimeStr < obj.attendanceToday.onDutyTime ){
 							el.dutyStatus = '上班打卡';
 						}else if(obj.serverTimeStr > obj.attendanceToday.offDutyTime){
@@ -339,14 +389,16 @@ export default {
 							$('#off').addClass('bdcolor');
 							el.dutyStatus = '下班打卡';
 						}else{
-							$('#on .go-click').addClass('orange')
+							$('#on .go-click').addClass('orange')							
 							el.dutyStatus = '迟到打卡';
 						}
 					}
 					if(obj.attendanceToday.clockInTime){
+						$('#on .go-clock').hide();
 						$('#off .go-clock').show();
-						$('#off').addClass('bdcolor');					
-
+						$('#on').removeClass('bdcolor');
+						$('#off').addClass('bdcolor');
+						el.remind = '努力工作，才有未来！'					
 						el.onClockTime = obj.attendanceToday.clockInTime;
 						el.dutyStatus = '下班打卡';
 						
@@ -358,13 +410,45 @@ export default {
 						$('#off .go-clock').show();
 						$('#off').addClass('bdcolor');
 
+						el.remind = '下班了，工作了一天早点休息！'
 						el.offClockTime = obj.attendanceToday.clockOutTime;
 						el.dutyStatus = '更新打卡';
 						
+						if(!obj.attendanceToday.clockInTime){
+							el.onClockTime = '缺卡'
+						}
 						if(obj.attendanceToday.clockOutTime < obj.attendanceToday.offDutyTime){
-							el.onDutyStatus = '早退'
+							el.offDutyStatus = '早退'
 						}
 					}
+
+					// 若是外勤
+					if(!obj.wifiName && !obj.wifiId){
+						el.isLeave = 1;
+						el.dutyStatus = '外勤打卡';
+						$('.go-click').addClass('orange');
+						el.wifiName = '定位中';
+						var geolocation = new BMap.Geolocation();    
+						geolocation.getCurrentPosition(function(r){
+							var mk = new BMap.Marker(r.point);    
+							var currentLat = r.point.lat;
+							var currentLon = r.point.lng;
+
+							var pt = new BMap.Point(currentLon, currentLat);
+							var geoc = new BMap.Geocoder();
+							geoc.getLocation(pt, function (rs) {
+								var addComp = rs.addressComponents;
+								var city = addComp.city;
+								var addComp = rs.addressComponents;
+								var texts = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber ;
+								el.wifiName = '当前位置：' + texts
+								el.wifiValue = texts
+								el.wifiId = currentLon + "," + currentLat
+							});
+						})
+						
+					}
+
 				}else{
 					Toast({
 						message: '今日加入考勤组,请您明日开始打卡!',
@@ -388,7 +472,7 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往home
-				this.$router.push({path:'/home'});
+				this.$router.push({path:'/'});
 			}
 		},
 		changeImg:function(val){

@@ -24,12 +24,12 @@ import leaveFlow from '../components/myFlow/leaveFlow.vue'
 
 // 配置路由
 export default [
+  // {
+  //   path: '/',
+  //   component: login
+  // },
   {
     path: '/',
-    component: login
-  },
-  {
-    path: '/home',
     component: home
   },
   // 系统设置

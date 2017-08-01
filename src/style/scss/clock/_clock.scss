@@ -124,7 +124,7 @@
 		width:100%;
 		box-sizing:border-box;
 		background-color:#f8f8f8;
-		padding:10px 20px;
+		padding:10px 0;
 		table{
 			width:100%;
 			text-align:center;
@@ -156,6 +156,21 @@
 					color:#fff;
 					background-color:#4b8dfa;
 				}
+				i{
+					width:3px;
+					height:3px;
+					display:block;
+					margin:5px auto 0 auto;
+					border-radius:50%;
+					-moz-border-radius:50%;
+					-webkit-border-radius:50%;
+				}
+				i.orange{
+					background-color:#ff9966;
+				}
+				i.blue{
+					background-color:#5e97f6;
+				}
 			}
 			td.otherMonth{
 				visibility:hidden;
@@ -175,6 +190,7 @@
 		}
 	}
 	.that-day{
+		display:none;
 		.duty{
 			width:100%;
 			padding:15px 20px;
