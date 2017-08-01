@@ -27,8 +27,12 @@ import jquery from './config/jquery-1.8.0.min'
 
 // 引用index.js文件
 import index from './config/index'
+// 引用form-plugin.js文件
+import form from './config/form-plugin'
 // 将index中的方法绑定到全局
 Vue.prototype.$index = index
+// 将form中的方法绑定到全局
+Vue.prototype.$form = form
 
 // 引用API文件
 import api from './config/api'
@@ -39,6 +43,8 @@ Vue.prototype.$api = api
 Vue.prototype.$user = new Object()
 // 为全局设置一个全局变量 记录log
 Vue.prototype.$log = new Object()
+// 为全局设置一个全局变量 记录leaveType
+Vue.prototype.$leaveType = new Object()
 // 运行
 new Vue({
   router,
