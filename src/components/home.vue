@@ -51,8 +51,8 @@
 					</div>
 					<!-- MANNAGE -->
 					<div class="go-mannage">
-						<div class="go-item">
-							<p>带我审批</p>
+						<div class="go-item" data="examine" v-on:click="toPage">
+							<p>待我审批</p>
 							<div class="number">9</div>
 						</div>
 						<i></i>
@@ -253,6 +253,8 @@ export default {
 				this.$router.push({path:'/system'});
 			}else if (a == '3') {
 				this.$router.push({path:'/myFlow'});
+			}else if (a == 'examine'){
+				this.$router.push({path:'/examine'});
 			}
 			// else if(a == 'logout'){
 			// 	localStorage.removeItem('userName');

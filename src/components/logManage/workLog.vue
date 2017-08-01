@@ -63,7 +63,7 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){//本组件data属性设置为0的，页面前往home
-				this.$router.push({path:'/home'});
+				this.$router.push({path:'/'});
 			}else if (a == 1) {
 				this.$router.push({path:'/myLog'});
 			}else if (a == 2) {
