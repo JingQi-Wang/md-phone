@@ -63,19 +63,11 @@
 					<div class="flowMould">
 						<p>审批人</p>
 						<div class="flowChart examine">
-							<span class="flowPeople">人事主管</span>
-							<img slot="icon" src="../../static/icon/arrow.svg" width="24" height="24" >
-							<span class="flowPeople">办公室主任</span>
-							<img slot="icon" src="../../static/icon/arrow.svg" width="24" height="24" >
-							<span class="flowPeople">总经理</span>
 						</div>
 					</div>
 					<div class="flowMould">
 						<p>抄送人</p>
-						<div class="flowChart">
-							<span class="flowPeople">人事主管</span>
-							<span class="flowPeople">办公室主任</span>
-							<span class="flowPeople">总经理</span>
+						<div class="flowChart copyTo">
 						</div>
 					</div>
 				</div>
@@ -139,40 +131,57 @@ export default {
 			processRecordId:this.$leaveType.processRecordId
 		}
 		that.$index.ajax(that,'/phMyRelated/getProcessFormMessage.ph',info,function(data){
+			data = $.parseJSON(data);
 			that.leaveType = data.leaveType;
-			that.userName = data.leaveType;
+			that.userName = data.userName;
 			that.title = data.title;
 			that.startTime = data.startTime;
 			that.endTime = data.endTime;
 			that.reason = data.reason;
 		});
 		that.$index.ajax(that,'/phMyRelated/getProcessExecutor.ph',info,function(data){
-			excuteUserHead = data.excuteUserHead;
-			var str = '';
-			for (var i = excuteUserHead; i ; i = i.nextTask) {
-			 	str += '<span class="flowPeople"'+i.executorId+'>'+i.executorName+'</span>';
-			 	str += '<img slot="icon" src="../../static/icon/arrow.svg" width="24" height="24" >'
-			}; 
-			$('.lookFlow .flowArea .examine').append(str);
-			$('.lookFlow .flowArea .examine img:last').remove();
+			//data = $.parseJSON(data);
+			if (data['excuteUserHead']) {
+				var excuteUserHead = data['excuteUserHead'];
+				var str = '';
+				for (var i = excuteUserHead; i ; i = i.nextTask) {
+				 	str += '<span class="flowPeople"'+i.executorId+'>'+i.executorName+'</span>';
+				 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
+				}; 
+				$('.lookFlow .flowArea .examine').append(str);
+				$('.lookFlow .flowArea .examine img:last').remove();
+			}
+			if (data['copyToUsers']) {
+				var copyToUsers = data['copyToUsers'];
+				var str = '';
+				for (var i = 0; i < data['copyToUsers'].length ; i ++ ) {
+				 	str += '<span class="flowPeople"'+data['copyToUsers'][i].copyToId+'>'+i.data['copyToUsers'][i].copyToName+'</span>';
+				}; 
+				$('.lookFlow .flowArea .copyTo').append(str);
+			}
 		});
 		that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
-			that.items = data;
-			var status = data[data.length-1].examineStatus;
-			if (status == '1') {
+			if (data.length > 0 ) {
+				that.items = data;
+				var status = data[data.length-1].examineStatus;
+				if (status == '1') {
+					$('.lookFlow .flowBottom').attr('status','1');
+					$('.lookFlow .flowBottom').text('叮一下');
+				}else if(status == '2'){
+					$('.lookFlow .flowBottom').attr('status','2');
+					$('.lookFlow .flowBottom').text('已通过');
+				}else if(status == '3'){
+					$('.lookFlow .flowBottom').attr('status','3');
+					$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+					$('.lookFlow .flowBottom').text('已被驳回');
+				}else if(status == '4'){
+					$('.lookFlow .flowBottom').attr('status','4');
+					$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+					$('.lookFlow .flowBottom').text('已被撤回');
+				}
+			}else{
 				$('.lookFlow .flowBottom').attr('status','1');
 				$('.lookFlow .flowBottom').text('叮一下');
-			}else if(status == '2'){
-				$('.lookFlow .flowBottom').attr('status','2');
-				$('.lookFlow .flowBottom').text('已通过');
-			}else if(status == '3'){
-				$('.lookFlow .flowBottom').attr('status','3');
-				$('.lookFlow .flowBottom').addClass('reject-flowBottom');
-				$('.lookFlow .flowBottom').text('已被驳回');
-			}else if(status == '4'){
-				$('.lookFlow .flowBottom').attr('status','4');
-				$('.lookFlow .flowBottom').addClass('reject-flowBottom');
-				$('.lookFlow .flowBottom').text('已被撤回');
 			}
 		});
 	},

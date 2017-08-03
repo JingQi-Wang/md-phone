@@ -15,16 +15,17 @@
 				</div>
 			</div>
 			<div class="message-box">
-				<div class="message-item">
+				<div class="message-item" v-for="item of items">
 					<div class="message-detail">
-						<h2>14:00&nbsp;&nbsp;系统消息</h2>
-						<p>梦德、冯良发起的物品领用申请需要您进行审批</p>
+						<h2>系统消息&nbsp;&nbsp; {{ item.createTime }}</h2>
+						<p>{{ item.title }}</p>
 						<div>
 							<img slot="icon" src="../../static/icon/flowIcon.svg" width="24" height="24">
 							<span>流程任务通知</span>
 						</div>
 					</div>
-					<span class="go-to" data="1" v-on:click="toPage">前往处理</span>
+					<span class="go-to" data="1" v-on:click="toPage" v-if="item.executeStatus == 1" v-bind:id="item.processRecordId">前往处理</span>
+					<span class="go-to" v-else>已处理</span>
 				</div>
 			</div>
 		</div>
@@ -38,8 +39,18 @@
 export default {
 	data() {
 		return {
-
+			items:[]
 		}
+	},
+	mounted () {
+		var info = {
+			userId : this.$user.userId,
+			userName : this.$user.userName
+		}
+		var that = this;
+		that.$index.ajax(that,'/phMyProcess/getWaitExamineProcess.ph',info,function(data){
+			that.items = data.rows;
+		});
 	},
 	methods: {
 		toPage:function(){
@@ -48,12 +59,16 @@ export default {
 			if(a == 0){//本组件data属性设置为0的，页面前往home
 				this.$router.push({path:'/'});
 			}else if (a == 1) {
+				var info = {
+					processRecordId:$(el).attr('id')
+				}
+				$.extend(this.$leaveType,info);
 				this.$router.push({path:'/flowExamine'});
 			}
+		},
+		refresh:function(){
+			window.location.reload()
 		}
-	},
-	refresh:function(){
-		window.location.reload()
-	}
+	}	
 }
 </script>

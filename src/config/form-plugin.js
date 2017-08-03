@@ -147,13 +147,13 @@ export default {
 					data = $.parseJSON(data);
 					if(data.success == true){
 						Toast({
-						  message: "表单提交成功",
+						  message: "流程启动成功",
 						  duration: 3000
 						});
 						ele.$router.push({path:'/launchFlow'});
 					}else{
 						Toast({
-						  message: "表单提交失败",
+						  message: "流程启动失败",
 						  duration: 3000
 						});
 					}

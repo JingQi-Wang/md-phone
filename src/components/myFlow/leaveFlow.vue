@@ -188,7 +188,8 @@ export default {
 			data:{//提交数据时的表单信息外的额外信息，被从后台查询出来的数据不会进行提交
 				userId:that.$user.userId,
 				userName:that.$user.userName,
-				leaveType:that.$leaveType.leaveType
+				leaveType:that.$leaveType.leaveType,
+				typeId:that.$leaveType.typeId
 			},
 			check:{//自定义的选择方式，如果不定义则会使用默认的方法进行选择，如时间
 				Date:function(){//自定义时间选择
@@ -273,7 +274,7 @@ export default {
 					userName:userName
 				}
 				that.$index.ajax(that,'/phMyProcess/addExecute.ph',info,function(data){
-					if($('.leaveFlow .examine img').length == 0){
+					if($('.leaveFlow .examine .flowPeople').length == 1){
 						var str = '<span class="flowPeople" id="'+userId+'">'+userName+'</span>';
 					}else{
 						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'">'+userName+'</span>';
@@ -290,7 +291,7 @@ export default {
 							userId:userId,
 							userName:userName
 						}
-						if($('.leaveFlow .examine img').length == 0){
+						if($('.leaveFlow .examine .flowPeople') == 1){
 
 							that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
 								Toast({

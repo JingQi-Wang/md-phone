@@ -66,8 +66,7 @@ export default {
 			userName : this.$user.userName
 		}
 		var that = this;
-		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',info,function(data){
-			console.log(data);
+		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',null,function(data){
 			that.items = data.rows;
 		});
 	},

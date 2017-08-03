@@ -12,9 +12,9 @@
 				</div>
 			</div>
 			<div class="applicationModel">
-				<p>常用(5)</p>
-				<div class="applicationArea">
-					<div class="applicationBar">
+				<p>常用({{ a }})</p>
+				 <div class="applicationArea">
+					<!--<div class="applicationBar">
 						<div class="applicationBlock">
 							<img slot="icon" src="../../static/icon/fillCard.svg" width="60" height="58">
 							<div class="icon-explain">补卡申请</div>
@@ -41,8 +41,8 @@
 							<img slot="icon" src="../../static/icon/night.svg" width="49" height="47">
 							<div class="icon-explain">夜勤请假</div>
 						</div>
-					</div>
-				</div>
+					</div>-->
+				</div> 
 			</div>
 			<div class="applicationModel  otherApplication">
 				<p>其他(3)</p>
@@ -69,18 +69,59 @@
 
 <!-- script -->
 <script>
+import src1 from '../../static/icon/clockIcon.svg'
+import src2 from '../../static/icon/goOut.svg'
+import src3 from '../../static/icon/fillCard.svg'
 export default {
 	data() {
 		return {
-			leaveType:''
+			leaveType:'',
+			a:''
 		}
 	},
 	mounted () {
 		var that = this;
-		that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
-			that.leaveType = data.rows;
-			//console.log(that.leaveType);
+		that.$index.ajax(that,'/phMyProcess/getProcesses.ph',null,function(data){
+			var str = '';
+			var i = 0;
+			for( var a in data){
+				if(data[a].specialProcess == 'false'){
+					if((i % 3) == 0 ){
+						str += '<div class="applicationBar">'
+					}
+					var src = data[a].iconUrl;
+					var img = null;
+					if(src == 'src1'){
+						img = src1;
+					}else if(src == 'src2'){
+						img = src2;
+					}else if(src == 'src3'){
+						img = src3;
+					}
+					str += '<div class="applicationBlock" typeId="'+data[a].typeId+'"><img slot="icon" src="'+ img +'" width="60" height="58"><div class="icon-explain">'+data[a].name+'</div></div>'
+					if((i % 3) == 2 ){
+						str += '</div>'
+					}
+					i++;
+				}
+			}
+			that.a = i;
+			$('.launchFlow .applicationArea').eq(0).append(str);
+			$('.launchFlow .applicationArea .applicationBlock').click(function(){
+				var typeId = $(this).attr('typeId');
+				var info = {
+					leaveType:'01',
+					typeId:typeId
+				}
+				$.extend(that.$leaveType,info);	
+				that.$router.push({path:'/leaveFlow'});
+			});
+
 		});
+		/*that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
+			that.leaveType = data.rows;
+			console.log(that.leaveType);
+		});*/
 	},
 	methods: {
 		toPage:function(event){
@@ -90,13 +131,13 @@ export default {
 				this.$router.push({path:'/myFlow'});
 			}else if (a == 1) {
 				this.$router.push({path:'/lookFlow'});
-			}else if (a == 2) {
+			}/*else if (a == 2) {
 				var info = {
 					leaveType:this.leaveType[1].optionKey
 				}
 				$.extend(this.$leaveType,info);				
 				this.$router.push({path:'/leaveFlow'});
-			}
+			}*/
 		}
 	}
 }
