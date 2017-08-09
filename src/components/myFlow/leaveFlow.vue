@@ -275,9 +275,9 @@ export default {
 				}
 				that.$index.ajax(that,'/phMyProcess/addExecute.ph',info,function(data){
 					if($('.leaveFlow .examine .flowPeople').length == 1){
-						var str = '<span class="flowPeople" id="'+userId+'">'+userName+'</span>';
+						var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
 					}else{
-						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'">'+userName+'</span>';
+						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
 					}
 					$('.leaveFlow .examine .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
@@ -286,10 +286,12 @@ export default {
 						var jqthat = $(this);
 						var userid = jqthat.attr('id');
 						var userName = $.trim(jqthat.text());
+						var taskId = jqthat.attr('taskId');
 						var info = {
 							typeId : '001',
 							userId:userId,
-							userName:userName
+							userName:userName,
+							taskId:taskId
 						}
 						if($('.leaveFlow .examine .flowPeople') == 1){
 
@@ -323,7 +325,7 @@ export default {
 					userName:userName
 				}
 				that.$index.ajax(that,'/phMyProcess/addCopyTo.ph',info,function(data){
-					var str = '<span class="flowPeople" id="'+userId+'">'+userName+'</span>';
+					var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
 					$('.leaveFlow .copyTo .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
 					$('.leaveFlow .container').eq(0).show();
@@ -331,10 +333,12 @@ export default {
 						var jqthat = $(this);
 						var userid = jqthat.attr('id');
 						var userName = $.trim(jqthat.text());
+						var taskId = jqthat.attr('taskId');
 						var info = {
 							typeId : '001',
 							userId:userId,
-							userName:userName
+							userName:userName,
+							taskId:taskId
 						}
 						that.$index.ajax(that,'/phMyProcess/deleteCopyTo.ph',info,function(data){
 							Toast({
