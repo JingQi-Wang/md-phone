@@ -130,7 +130,7 @@ export default {
 			excuteUserHead = data.excuteUserHead;
 			var str = '';
 			for (var i = excuteUserHead; i ; i = i.nextTask) {
-			 	str += '<span class="flowPeople"'+i.executorId+'>'+i.executorName+'</span>';
+			 	str += '<span class="flowPeople" id="'+i.executorId+'">'+i.executorName+'</span>';
 			 	str += '<img slot="icon" src="../../static/icon/arrow.svg" width="24" height="24" >'
 			}; 
 			$('.flowExamine .flowArea .examine').append(str);
