@@ -383,19 +383,20 @@ export default {
 			var info;
 			var title = $('.leaveFlow .flow .title').val();
 			var reason = $('.leaveFlow .flow .reason').val();
-			/*if(title == '' || title = null) {
+
+			if(title == '' || title == null){
 				Toast({
 					 message: '请填写标题',
 					 duration: 1000
 				});
 				return;
-			}else if(reason == '' || reason = null){
+			}else if(reason == '' || reason == null){
 				Toast({
 					 message: '请填写原因',
 					 duration: 1000
 				});
 				return;
-			}*/
+			}
 			if(typeId = '001'){
 				var startTimeStr = $.trim($('.leaveFlow .flow .startTime').text());
 				var endTimeStr = $.trim($('.leaveFlow .flow .endTime').text());
