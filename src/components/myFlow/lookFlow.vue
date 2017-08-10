@@ -154,8 +154,8 @@ export default {
 			if (data['copyToUsers']) {
 				var copyToUsers = data['copyToUsers'];
 				var str = '';
-				for (var i = 0; i < data['copyToUsers'].length ; i ++ ) {
-				 	str += '<span class="flowPeople"'+data['copyToUsers'][i].copyToId+'>'+i.data['copyToUsers'][i].copyToName+'</span>';
+				for (var i = 0; i < copyToUsers.length ; i ++ ) {
+				 	str += '<span class="flowPeople"'+copyToUsers[i].executorId+'>'+copyToUsers[i].executorName+'</span>';
 				}; 
 				$('.lookFlow .flowArea .copyTo').append(str);
 			}

@@ -110,7 +110,6 @@ export default {
 			$('.launchFlow .applicationArea .applicationBlock').click(function(){
 				var typeId = $(this).attr('typeId');
 				var info = {
-					leaveType:'01',
 					typeId:typeId
 				}
 				$.extend(that.$leaveType,info);	

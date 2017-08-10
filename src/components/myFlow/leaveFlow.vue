@@ -106,106 +106,107 @@ export default {
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
 		var that = this;
-		phone_form.templateObj = {
-			dom:'.leaveFlow .flow',//
-			title:'填写表单',//表单的标题
-			queryUrl:'',//查询信息使用的地址，如果为空则不进行信息的查询
-			queryParams:{//进行查询时所携带的参数，可以不进行设置
-				//userId:'userid'
-			},
-			colums:[//列的数组
-			    {
-					name:'title', //该字段的数据库名，必填项
-					columName:'标题',//显示在左侧的字段的名称
-					defaultValue:'',//默认值，如果不填则为空
-					must:false,//是否为必填项，如果为必填项，则在未填写时，会弹出提示 默认值为 false
-					readOnly:true,//是否为只读，如果为只读形式则无法进行修改 默认值是 false
-					verify:function(value){//验证value值的方式，返回值为true或者false，如果该项为空则进行自定义验证
-						if(value == ''){
-							return false;
-						}else{
-							return true;
-						}
-					},
-					type:'String',//输入的类型，当为String字符类型时，不做任何处理，在进行其他处理时需要进行处理，比如date日期。
-					lookType:'input',//显示类型，look：仅查看，input：以input的形式进行显示，可操作，text：文本框形式
-					show:true, //是否进行显示，默认值为true
-			    },
-			    {
-					name:'startTime', //该字段的数据库名，必填项
-					columName:'开始时间',//显示在左侧的字段的名称
-					defaultValue:new Date().Format('yyyy-MM-dd hh:mm'),//默认值，如果不填则为空
-					must:false,//是否为必填项，如果为必填项，则在未填写时，会弹出提示 默认值为 false
-					readOnly:true,//是否为只读，如果为只读形式则无法进行修改 默认值是 false
-					verify:function(value){//验证value值的方式，返回值为true或者false，如果该项为空则进行自定义验证
-						if(value == ''){
-							return false;
-						}else{
-							return true;
-						}
-					},
-					type:'date',//输入的类型，当为String字符类型时，不做任何处理，在进行其他处理时需要进行处理，比如date日期。
-					lookType:'look',//显示类型，look：仅查看，input：以input的形式进行显示，可操作，text：文本框形式
-					show:true, //是否进行显示，默认值为true
-			    },
-			    {
-					name:'endTime', //该字段的数据库名，必填项
-					columName:'结束时间',//显示在左侧的字段的名称
-					defaultValue:new Date().Format('yyyy-MM-dd hh:mm'),//默认值，如果不填则为空
-					must:false,//是否为必填项，如果为必填项，则在未填写时，会弹出提示 默认值为 false
-					readOnly:true,//是否为只读，如果为只读形式则无法进行修改 默认值是 false
-					verify:function(value){//验证value值的方式，返回值为true或者false，如果该项为空则进行自定义验证
-						if(value == ''){
-							return false;
-						}else{
-							return true;
-						}
-					},
-					type:'date',//输入的类型，当为String字符类型时，不做任何处理，在进行其他处理时需要进行处理，比如date日期。
-					lookType:'look',//显示类型，look：仅查看，input：以input的形式进行显示，可操作，text：文本框形式
-					show:true, //是否进行显示，默认值为true
-			    },
-			    {
-					name:'reason', //该字段的数据库名，必填项
-					columName:'请假原因',//显示在左侧的字段的名称
-					defaultValue:'',//默认值，如果不填则为空
-					must:false,//是否为必填项，如果为必填项，则在未填写时，会弹出提示 默认值为 false
-					readOnly:true,//是否为只读，如果为只读形式则无法进行修改 默认值是 false
-					verify:function(value){//验证value值的方式，返回值为true或者false，如果该项为空则进行自定义验证
-						if(value == ''){
-							return false;
-						}else{
-							return true;
-						}
-					},
-					type:'String',//输入的类型，当为String字符类型时，不做任何处理，在进行其他处理时需要进行处理，比如date日期。
-					lookType:'text',//显示类型，look：仅查看，input：以input的形式进行显示，可操作，text：文本框形式
-					show:true, //是否进行显示，默认值为true
-			    }
-			],
-			type:'post',//对象进行提交时的类型设置
-			submitUrl:'/phMyProcess/startProcess.ph',//提交表单的地址
-			data:{//提交数据时的表单信息外的额外信息，被从后台查询出来的数据不会进行提交
-				userId:that.$user.userId,
-				userName:that.$user.userName,
-				leaveType:that.$leaveType.leaveType,
-				typeId:that.$leaveType.typeId
-			},
-			check:{//自定义的选择方式，如果不定义则会使用默认的方法进行选择，如时间
-				Date:function(){//自定义时间选择
-					alert("自定义的时间选择");
-				},
-				user:function(){//自定义的用户选择
-					
+		var typeId = that.$leaveType.typeId;
+		var flowStr = '';
+		if (typeId == '001') {
+			flowStr += '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">标题</div>'
+					+  '<div  class="flowTitle2">'
+					+  '<input type="text" class="title"/></div>'
+					+  '</div>'
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">请假类型</div>'
+					+  '<div  class="flowTitle2"><select class="leaveType"></select></div>'	
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">开始时间</div>'
+					+  '<div  class="flowTitle2 startTime"></div>'	
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">结束时间</div>'
+					+  '<div  class="flowTitle2 endTime"></div>'	
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">请假原因</div>'
+					+  '<div  class="flowTitle2 "><textarea class="reason"></textarea></div>'	
+					+  '</div>';
+			$('.leaveFlow .flow').append(flowStr);
+			that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
+				data = data.rows;
+				var str = '';
+				for(var i = 0;i<data.length;i++){
+					str += '<option value="'+data[i].optionKey+'">'+data[i].optionValue+'</optio>';
 				}
-			}
+				$('.leaveFlow .flow .leaveType').append(str);
+			});
+			$('.leaveFlow .flow .startTime').click(function(){
+				that.$refs.beginPicker.open();
+			});
+			$('.leaveFlow .flow .endTime').click(function(){
+				that.$refs.endPicker.open();
+			});
+		}else if (typeId == '002') {
+			$('.leaveFlow .container:eq(0) .title-box .m-office').text('公出');
+			flowStr += '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">标题</div>'
+					+  '<div  class="flowTitle2">'
+					+  '<input type="text" class="title"/></div>'
+					+  '</div>'
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">开始时间</div>'
+					+  '<div  class="flowTitle2 startTime"></div>'	
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">结束时间</div>'
+					+  '<div  class="flowTitle2 endTime"></div>'	
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">公出原因</div>'
+					+  '<div  class="flowTitle2 "><textarea class="reason"></textarea></div>'	
+					+  '</div>';
+			$('.leaveFlow .flow').append(flowStr);
+			$('.leaveFlow .flow .startTime').click(function(){
+				that.$refs.beginPicker.open();
+			});
+			$('.leaveFlow .flow .endTime').click(function(){
+				that.$refs.endPicker.open();
+			});
+		}else if (typeId == '003') {
+			$('.leaveFlow .container:eq(0) .title-box .m-office').text('离职');
+			$('.leaveFlow .container:eq(0) .title-box .m-office').text('公出');
+			flowStr += '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">标题</div>'
+					+  '<div  class="flowTitle2">'
+					+  '<input type="text" class="title"/></div>'
+					+  '</div>'
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">公出原因</div>'
+					+  '<div  class="flowTitle2 "><textarea class="reason"></textarea></div>'	
+					+  '</div>';
+			$('.leaveFlow .flow').append(flowStr);
 		}
-		that.$form.createForm(phone_form.templateObj);
-		$('.leaveFlow .flow div[name=startTime]').click(function(){
-			that.$refs.beginPicker.open();
-		});
-		$('.leaveFlow .flow div[name=endTime]').click(function(){
-			that.$refs.endPicker.open();
+		var info = {
+			typeId:typeId
+		}
+		that.$index.ajax(this,'/phMyProcess/getProcessMessage.ph',info,function(data){
+			if (data.excuteUserHead) {
+				var excuteUserHead = data.excuteUserHead;
+				var str = '';
+				for (var i = excuteUserHead; i ; i = i.nextTask) {
+				 	str += '<span class="flowPeople" id="'+i.executorId+'" taskId="'+i.taskId+'">'+i.executorName+'</span>';
+				 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
+				}; 
+				$('.leaveFlow .flowArea .examine .addPeople').before(str);
+				$('.leaveFlow .flowArea .examine img:last').remove();
+			}
+			if(data.copyToUsers){
+				var copyToUsers = data.copyToUsers;
+				var str = '';
+				for(var i = 0 ; i < copyToUsers.length ; i++){
+					str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'" taskId="'+copyToUsers[i].taskId+'">'+copyToUsers[i].executorName+'</span>';
+				}
+				$('.leaveFlow .flowArea .copyTo .addPeople').before(str);
+			}
 		});
 	},
 	updated () {
@@ -214,12 +215,12 @@ export default {
 	methods: {
 		selectBeginDate:function(value){
 			//this.showBeginDate = value.Format('yyyy-MM-dd hh:mm');
-			$('.leaveFlow .flow div[name=startTime]').text(value.Format('yyyy-MM-dd hh:mm'));
+			$('.leaveFlow .flow .startTime').text(value.Format('yyyy-MM-dd hh:mm'));
 			
 		},
 		selectEndDate:function(value){
 			//this.showEndDate = value.Format('yyyy-MM-dd hh:mm');
-			$('.leaveFlow .flow div[name=endTime]').text(value.Format('yyyy-MM-dd hh:mm'));
+			$('.leaveFlow .flow .endTime').text(value.Format('yyyy-MM-dd hh:mm'));
 		},
 		toPage:function(event){
 			var el = event.currentTarget;
@@ -377,7 +378,69 @@ export default {
 			});
 		},
 		startProgress:function(){
-			this.$form.submit(this,phone_form.templateObj);			
+			var that = this;
+			var typeId = that.$leaveType.typeId;
+			var info;
+			var title = $('.leaveFlow .flow .title').val();
+			var reason = $('.leaveFlow .flow .reason').val();
+			/*if(title == '' || title = null) {
+				Toast({
+					 message: '请填写标题',
+					 duration: 1000
+				});
+				return;
+			}else if(reason == '' || reason = null){
+				Toast({
+					 message: '请填写原因',
+					 duration: 1000
+				});
+				return;
+			}*/
+			if(typeId = '001'){
+				var startTimeStr = $.trim($('.leaveFlow .flow .startTime').text());
+				var endTimeStr = $.trim($('.leaveFlow .flow .endTime').text());
+				info = {
+					title:title,
+					userName:that.$user.userName,
+					userId:that.$user.userId,
+					departmentName:that.$user.departmentName,
+					startTimeStr:startTimeStr,
+					endTimeStr:endTimeStr,
+					reason:reason,
+					typeId:typeId,
+					leaveType:$('.leaveFlow .flow .leaveType').val(),
+					leaveTypeValue:$('.leaveFlow .flow .leaveType option:selected').text()
+				}
+			}else if(typeId == '002'){
+				var startTimeStr = $.trim($('.leaveFlow .flow .startTime').text());
+				var endTimeStr = $.trim($('.leaveFlow .flow .endTime').text());
+				info = {
+					title:title,
+					userName:that.$user.userName,
+					userId:that.$user.userId,
+					departmentName:that.$user.departmentName,
+					startTimeStr:startTimeStr,
+					endTimeStr:endTimeStr,
+					reason:reason,
+					typeId:typeId
+				}
+			}else if(typeId == '003'){
+				info = {
+					title:title,
+					userName:that.$user.userName,
+					userId:that.$user.userId,
+					departmentName:that.$user.departmentName,
+					reason:reason,
+					typeId:typeId
+				}
+			}
+			that.$index.ajax(that,'/phMyProcess/startProcess.ph',info,function(data){
+				Toast({
+				  message: "流程启动成功",
+				  duration: 3000
+				});
+				that.$router.push({path:'/launchFlow'});
+			});
 		},
 		back:function(event){
 			var el = event.currentTarget;
