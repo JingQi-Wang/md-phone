@@ -29,23 +29,26 @@
 			<div class="class-box">
 				<p>班次：{{ dutyType }}</p>
 				<p class="classDuty">{{ onDutyTime }} - {{ offDutyTime }}</p>
-				<p>&nbsp;&nbsp;</p>	
+				<p>&nbsp;&nbsp;</p>
 				<p>考勤组：{{ attendanceGroupName }}</p>
 			</div>
+
 			<!-- that day -->
 			<div class="that-day">
 				<div class="duty">
 					<p>上班：&nbsp;&nbsp;</p>
 					<p>{{ onClockTime }}</p>
-					<span>{{ onDutyStatus }}</span>
+					<span>{{ onDutyStatus }}&nbsp;&nbsp;</span>
+					<mt-button type="danger" size="small" v-show="on" v-on:click="forgetCard(1)">去补卡</mt-button>
 				</div>
 				<div class="duty">
 					<p>下班：&nbsp;&nbsp;</p>
 					<p>{{ offClockTime }}</p>
-					<span>{{ offDutyStatus }}</span>
+					<span>{{ offDutyStatus }}&nbsp;&nbsp;</span>
+					<mt-button type="danger" size="small" v-show="off" v-on:click="forgetCard(2)">去补卡</mt-button>
 				</div>
 			</div>
-
+			
 		</div>
 		<mt-datetime-picker
 			ref="monthPicker"
@@ -87,7 +90,10 @@ export default {
 			onClockTime:'',//上班打卡时间
 			offClockTime:'',//下班打卡时间
 			onDutyStatus:'',//上班状态
-			offDutyStatus:''//下班状态
+			offDutyStatus:'',//下班状态
+			on:false,
+			off:false,
+			currentDay:''//选中的日期
 		}
 	},
 	watch: {
@@ -100,6 +106,17 @@ export default {
 		this.getMyClockDayDetail(this.dateMonthValue.Format('yyyyMM01'))
 	},
 	methods: {
+		forgetCard:function(replaceType){
+			if(replaceType == 1){
+				this.$leaveType.replaceTime = this.onDutyTime;
+			}else if(replaceType == 2){
+				this.$leaveType.replaceTime = this.offDutyTime;
+			}
+			this.$leaveType.typeId = '007';
+			this.$leaveType.replaceType = replaceType;
+			this.$leaveType.replaceRecordDate = this.currentDay;
+			this.$router.push({path:'/leaveFlow'});
+		},
 		selectMonthPicker:function(value){
 			this.showDateMonthValue = value.Format('yyyy年MM月');
 			dateObj.setDate(new Date(value));
@@ -227,8 +244,9 @@ export default {
 		},
 		getMyClockDayDetail:function(recordDateStr){
 			var el = this;
+			el.currentDay = recordDateStr.substr(0,4)+'-'+recordDateStr.substr(4,2)+ '-' +recordDateStr.substr(6,2);
 			el.$index.ajax(this, '/phClock/getMyClockDayDetail.ph', {
-				recordDateStr:recordDateStr.substr(0,4)+'-'+recordDateStr.substr(4,2)+ '-' +recordDateStr.substr(6,2),
+				recordDateStr:el.currentDay,
 				isLeave:1
 			}, function(data){
 				// 成功回调
@@ -236,24 +254,28 @@ export default {
 					$('.classDuty').show();
 					$('.that-day').show();					
 					if(data.attendanceRecord.leaveFlag == 0){
+						el.on = false;
+						el.off = false;
 						el.dutyType = '';
 						el.onDutyTime = data.attendanceRecord.onDutyTime
 						el.offDutyTime = data.attendanceRecord.offDutyTime
 						el.onClockTime = data.attendanceRecord.clockInTime || '缺卡'
 						el.offClockTime = data.attendanceRecord.clockOutTime || '缺卡'
 						if(data.attendanceRecord.beLateFlag == 0){
-							el.onDutyStatus = '（正常打卡）'
+							el.onDutyStatus = '（正常打卡）';
 						}else if(data.attendanceRecord.beLateFlag == 1){
-							el.onDutyStatus = '（迟到）'
-						}else{
-							el.onDutyStatus = ''
+							el.onDutyStatus = '（迟到）';
+						}else if(data.attendanceRecord.beLateFlag == 2){
+							el.onDutyStatus = '';
+							el.on = true;
 						}
 						if(data.attendanceRecord.leaveEarlyFlag == 0){
-							el.offDutyStatus = '（正常打卡）'
+							el.offDutyStatus = '（正常打卡）';
 						}else if(data.attendanceRecord.leaveEarlyFlag == 1){
-							el.offDutyStatus = '（早退）'
-						}else{
-							el.offDutyStatus = ''
+							el.offDutyStatus = '（早退）';
+						}else if(data.attendanceRecord.leaveEarlyFlag == 2){
+							el.offDutyStatus = '';
+							el.off = true;
 						}
 					}else{
 						if(data.attendanceRecord.leaveFlag == 3){
