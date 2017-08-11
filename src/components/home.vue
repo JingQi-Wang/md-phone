@@ -56,7 +56,7 @@
 							<div class="number">{{ waitMe }}</div>
 						</div>
 						<i></i>
-						<div class="go-item">
+						<div class="go-item" data="clock" v-on:click="toPage">
 							<p>出勤天数</p>
 							<div class="number">{{ dutyDays }}</div>
 						</div>
@@ -171,8 +171,8 @@ export default {
 			departmentName:'',
 			postName:'',
 			roles:'',
-			waitMe:0,
-			dutyDays:0
+			waitMe:'',
+			dutyDays:''
 		}
 	},
 	created () {
@@ -196,25 +196,28 @@ export default {
 				str += data.roles[i].roleName + ' '
 			}
 			el.roles = str;
+
+			//待审流程
+			el.$index.ajax(el,'/phMyProcess/getWaitExamineProcess.ph',{
+				userId : el.$user.userId,
+				userName : el.$user.userName
+			},function(data){
+				el.waitMe = data.rows.length;
+			});
+			//出勤天数
+			el.$index.ajax(el, '/phClock/getMyClockMonthForm.ph', {
+				balanceMonth:new Date().Format('yyyy-MM')
+			}, function(data){
+				// 成功回调
+				if(data.clockMonthBalanceForm){
+					el.dutyDays = data.clockMonthBalanceForm.attendanceDays
+				}else{
+					el.dutyDays = 0
+				}
+			})
+
 		});
-		//待审流程
-		el.$index.ajax(this,'/phMyProcess/getWaitExamineProcess.ph',{
-			userId : this.$user.userId,
-			userName : this.$user.userName
-		},function(data){
-			el.waitMe = data.rows.length;
-		});
-		//出勤天数
-		el.$index.ajax(this, '/phClock/getMyClockMonthForm.ph', {
-			balanceMonth:new Date().Format('yyyy-MM')
-		}, function(data){
-			// 成功回调
-			if(data.clockMonthBalanceForm){
-				el.dutyDays = data.clockMonthBalanceForm.attendanceDays
-			}else{
-				el.dutyDays = 0
-			}
-		})
+
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
@@ -277,6 +280,8 @@ export default {
 				this.$router.push({path:'/myFlow'});
 			}else if (a == 'examine'){
 				this.$router.push({path:'/examine'});
+			}else if(a == 'clock'){
+				this.$router.push({path:'/clock?value=2'});
 			}
 			// else if(a == 'logout'){
 			// 	localStorage.removeItem('userName');
