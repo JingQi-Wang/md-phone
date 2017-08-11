@@ -3,9 +3,9 @@
 	<div class="home">
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
-			<mt-tab-container-item id="message-container">
+			<!-- <mt-tab-container-item id="message-container">
 				<div class="container">
-					<!-- MESSAGE SELECT -->
+					MESSAGE SELECT
 					<div class="message-select">
 						<select name="">
 							<option value="0">全部</option>
@@ -14,7 +14,7 @@
 							<option value="3">叮消息</option>
 						</select>
 					</div>
-					<!-- MESSAGE CONTENT -->
+					MESSAGE CONTENT 
 					<div class="message-box">
 						<div class="message-item">
 							<div class="message-detail">
@@ -31,7 +31,7 @@
 
 					</div>
 				</div>
-			</mt-tab-container-item>
+			</mt-tab-container-item> -->
 			<mt-tab-container-item id="work-container">
 				<div class="container">
 					<div class="title-box">
@@ -40,9 +40,9 @@
 							<div class="office-icon">
 								<img slot="icon" src="../static/icon/set.svg" width="24" height="24" data="system" v-on:click="toPage">
 							</div>
-							<div class="office-icon">
+							<!-- <div class="office-icon">
 								<img slot="icon" src="../static/icon/ring.svg" width="24" height="24">
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<!-- BANNER -->
@@ -53,12 +53,12 @@
 					<div class="go-mannage">
 						<div class="go-item" data="examine" v-on:click="toPage">
 							<p>待我审批</p>
-							<div class="number">9</div>
+							<div class="number">{{ waitMe }}</div>
 						</div>
 						<i></i>
 						<div class="go-item">
 							<p>出勤天数</p>
-							<div class="number">10</div>
+							<div class="number">{{ dutyDays }}</div>
 						</div>
 					</div>
 					<br />
@@ -99,9 +99,9 @@
 					<div class="title-box">
 						<div class="m-office">M-office</div>
 						<div class="m-icon">
-							<div class="office-icon">
+							<!-- <div class="office-icon">
 								<img slot="icon" src="../static/icon/ring.svg" width="24" height="24">
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<br />
@@ -135,10 +135,10 @@
 		</mt-tab-container>
 		<!-- tabbar -->
 		<mt-tabbar v-model="selected" fixed>
-			<mt-tab-item id="message">
+			<!-- <mt-tab-item id="message">
 				<img slot="icon" src="../static/icon/comments.svg" class="message">
 				消息
-			</mt-tab-item>
+			</mt-tab-item> -->
 			<mt-tab-item id="work">
 				<img slot="icon" src="../static/icon/allo.svg" class="work">
 				工作
@@ -154,8 +154,8 @@
 <!-- SCRIPT -->
 <script>
 /* FOOTER ICON INPUT */
-import messageSrc from '../static/icon/comments.svg'
-import messageSrco from '../static/icon/commentso.svg'
+// import messageSrc from '../static/icon/comments.svg'
+// import messageSrco from '../static/icon/commentso.svg'
 import allSrc from '../static/icon/all.svg'
 import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
@@ -170,7 +170,9 @@ export default {
 			userName:'',
 			departmentName:'',
 			postName:'',
-			roles:''
+			roles:'',
+			waitMe:0,
+			dutyDays:0
 		}
 	},
 	created () {
@@ -194,11 +196,29 @@ export default {
 				str += data.roles[i].roleName + ' '
 			}
 			el.roles = str;
+		});
+		//待审流程
+		el.$index.ajax(this,'/phMyProcess/getWaitExamineProcess.ph',{
+			userId : this.$user.userId,
+			userName : this.$user.userName
+		},function(data){
+			el.waitMe = data.rows.length;
+		});
+		//出勤天数
+		el.$index.ajax(this, '/phClock/getMyClockMonthForm.ph', {
+			balanceMonth:new Date().Format('yyyy-MM')
+		}, function(data){
+			// 成功回调
+			if(data.clockMonthBalanceForm){
+				el.dutyDays = data.clockMonthBalanceForm.attendanceDays
+			}else{
+				el.dutyDays = 0
+			}
 		})
 	},
 	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
-	
+
 	},
 	updated () {
 		//数据更新重新渲染后会执行
@@ -207,32 +227,34 @@ export default {
 	watch: {
 		selected: function (val) {
 			// 这里就可以通过 val 的值变更来确定
-			if(val == 'message'){
-				this.active = 'message-container'				
-			}else if(val == 'work'){
+			if(val == 'work'){
 				this.active = 'work-container'
 			}else if(val == 'my-condition'){
 				this.active = 'my-container'
 			}
+			// if(val == 'message'){
+			// 	this.active = 'message-container'				
+			// }
 			//changeImg
 			this.changeImg(val);
 		}
 	},
 	methods: {
 		changeImg:function(val){
-			if(val == 'message'){
-				$('.'+ val +'').attr('src',messageSrco);
-				$('.work').attr('src',allSrc);
-				$('.my-condition').attr('src',accountSrc);
-			}else if(val == 'work'){
+			if(val == 'work'){
 				$('.'+ val +'').attr('src',allSrco);
-				$('.message').attr('src',messageSrc);
 				$('.my-condition').attr('src',accountSrc);
+				// $('.message').attr('src',messageSrc);
 			}else if(val == 'my-condition'){
 				$('.'+ val +'').attr('src',accountSrco);
-				$('.message').attr('src',messageSrc);
 				$('.work').attr('src',allSrc);
+				// $('.message').attr('src',messageSrc);
 			}
+			// if(val == 'message'){
+			// 	$('.'+ val +'').attr('src',messageSrco);
+			// 	$('.work').attr('src',allSrc);
+			// 	$('.my-condition').attr('src',accountSrc);
+			// } 
 		},
 		toPage:function(event){
 			var el = event.currentTarget;
