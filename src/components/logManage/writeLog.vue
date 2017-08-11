@@ -6,7 +6,7 @@
 			<div class="title-box">
 				<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">							
 				<div class="m-office">
-					修改日志
+					写日志
 				</div>
 				<div class="m-icon">
 					<!-- <div class="office-icon">
@@ -25,14 +25,15 @@
 				<input class="title" type="text" v-model="titleName"/>
 			</div>
 			<div class="tremBar editArea">
-				<div>内容：</div>
-				<div>
+				<!-- <div>内容：</div> -->
+				<span style="float:left;">内容：</span>
+				<!-- <div> -->
 					<textarea v-model="text"></textarea>
-				</div>
+				<!-- </div> -->
 			</div>
-		</div>
-		<div class="editBtn" v-on:click="save">
-			保存
+			<div class="editBtn" v-on:click="save">
+				保存
+			</div>
 		</div>
 		<mt-datetime-picker
 			ref="picker"

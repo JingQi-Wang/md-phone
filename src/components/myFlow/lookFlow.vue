@@ -131,7 +131,9 @@ export default {
 			processRecordId:this.$leaveType.processRecordId
 		}
 		that.$index.ajax(that,'/phMyRelated/getProcessFormMessage.ph',info,function(data){
+
 			data = $.parseJSON(data);
+			console.log(data);
 			that.leaveType = data.leaveType;
 			that.userName = data.userName;
 			that.title = data.title;

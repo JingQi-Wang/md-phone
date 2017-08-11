@@ -23,14 +23,12 @@
 				<input class="title" type="text" v-model="titleName"/>
 			</div>
 			<div class="tremBar editArea">
-				<div>内容：</div>
-				<div>
-					<textarea  v-model="text"></textarea>
-				</div>
+				<div style="float:left;">内容：</div>
+				<textarea  v-model="text"></textarea>
 			</div>
-		</div>
-		<div class="editBtn" v-on:click="edit">
-			修改
+			<div class="editBtn" v-on:click="edit">
+				修改
+			</div>
 		</div>
 	</div>
 </template>
