@@ -10,6 +10,14 @@
 		.flowStatus2{
 			color:black;
 		}
+		.startTime{
+			width:200px;
+			height:21px;
+		}
+		.endTime{
+			width:200px;
+			height:21px;
+		}
 	}
 	.flowTitle{
 		border-bottom:none;
@@ -22,7 +30,7 @@
 		}
 		select{
 			border:none;
-			width:80%;
+			width:178px;
 		}
 	}
 	.logArea{

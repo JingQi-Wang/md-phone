@@ -25,11 +25,11 @@
 							{{ userName }}
 						</div>
 					</div>
-					<div class="flowTitle">
-						<div  class="flowTitle1">
+					<div class="flowStatus">
+						<div  class="flowStatus1">
 							标题
 						</div>
-						<div  class="flowTitle2">
+						<div  class="flowStatus2">
 							{{ title }}
 						</div>
 					</div>
@@ -49,11 +49,11 @@
 							{{ endTime }}
 						</div>
 					</div>
-					<div class="flowTitle">
-						<div  class="flowTitle1">
+					<div class="flowStatus">
+						<div  class="flowStatus1">
 							请假原因
 						</div>
-						<div  class="flowTitle2">
+						<div  class="flowStatus2">
 							{{ reason }}
 						</div>
 					</div>
@@ -135,8 +135,8 @@ export default {
 			that.leaveType = data.leaveType;
 			that.userName = data.userName;
 			that.title = data.title;
-			that.startTime = data.startTime;
-			that.endTime = data.endTime;
+			that.startTime = data.startTimeStr;
+			that.endTime = data.endTimeStr;
 			that.reason = data.reason;
 		});
 		that.$index.ajax(that,'/phMyRelated/getProcessExecutor.ph',info,function(data){
