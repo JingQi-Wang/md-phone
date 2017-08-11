@@ -173,7 +173,6 @@ export default {
 			});
 		}else if (typeId == '003') {
 			$('.leaveFlow .container:eq(0) .title-box .m-office').text('离职');
-			$('.leaveFlow .container:eq(0) .title-box .m-office').text('公出');
 			flowStr += '<div class="flowTitle">'
 					+  '<div  class="flowTitle1">标题</div>'
 					+  '<div  class="flowTitle2">'
@@ -181,6 +180,26 @@ export default {
 					+  '</div>'
 					+  '<div class="flowTitle">'
 					+  '<div  class="flowTitle1">公出原因</div>'
+					+  '<div  class="flowTitle2 "><textarea class="reason"></textarea></div>'	
+					+  '</div>';
+			$('.leaveFlow .flow').append(flowStr);
+		}else if (typeId == '007') {
+			$('.leaveFlow .container:eq(0) .title-box .m-office').text('补卡');
+			flowStr += '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">标题</div>'
+					+  '<div  class="flowTitle2">'
+					+  '<input type="text" class="title"/></div>'
+					+  '</div>'
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">补卡日期</div>'
+					+  '<div  class="flowTitle2 startTime">'+that.$leaveType.replaceRecordDate+'</div>'
+					+  '</div>'	
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">补卡时间</div>'
+					+  '<div  class="flowTitle2 endTime">'+that.$leaveType.replaceTime+'</div>'	
+					+  '</div>'
+					+  '<div class="flowTitle">'
+					+  '<div  class="flowTitle1">补卡原因</div>'
 					+  '<div  class="flowTitle2 "><textarea class="reason"></textarea></div>'	
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
@@ -225,7 +244,10 @@ export default {
 		toPage:function(event){
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
-			if (a == 0) {
+			var typeId = this.$leaveType.typeId;
+			if (a == 0 && typeId == '007') {
+				this.$router.push({path:'/clockTotalExplain'});
+			}else if( a == 0){
 				this.$router.push({path:'/launchFlow'});
 			}
 		},
@@ -434,13 +456,29 @@ export default {
 					reason:reason,
 					typeId:typeId
 				}
+			}else if(typeId == '007'){
+				info = {
+					title:title,
+					userName:that.$user.userName,
+					userId:that.$user.userId,
+					departmentName:that.$user.departmentName,
+					reason:reason,
+					typeId:typeId,
+					replaceType:1,
+					replaceRecordDate:that.$leaveType.replaceRecordDate,
+					replaceTime:that.$leaveType.replaceTime
+				}
 			}
 			that.$index.ajax(that,'/phMyProcess/startProcess.ph',info,function(data){
 				Toast({
 				  message: "流程启动成功",
 				  duration: 3000
 				});
-				that.$router.push({path:'/launchFlow'});
+				if(typeId == '007'){
+					that.$router.push({path:'/clockTotalExplain'});
+				}else{
+					that.$router.push({path:'/launchFlow'});
+				}
 			});
 		},
 		back:function(event){

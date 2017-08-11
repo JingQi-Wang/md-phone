@@ -85,7 +85,7 @@ export default {
 			var str = '';
 			var i = 0;
 			for( var a in data){
-				if(data[a].specialProcess == 'false'){
+				if(data[a].specialProcess == 'false'&&data[a].typeId != '007'){
 					if((i % 3) == 0 ){
 						str += '<div class="applicationBar">'
 					}
@@ -117,10 +117,7 @@ export default {
 			});
 
 		});
-		/*that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
-			that.leaveType = data.rows;
-			console.log(that.leaveType);
-		});*/
+		
 	},
 	methods: {
 		toPage:function(event){

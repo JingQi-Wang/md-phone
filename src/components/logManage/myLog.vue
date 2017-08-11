@@ -9,9 +9,9 @@
 					我的日志
 				</div>
 				<div class="m-icon">
-					<div class="office-icon">
+					<!-- <div class="office-icon">
 						<img slot="icon" src="../../static/icon/ring.svg" width="24" height="24">
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="logArea">
