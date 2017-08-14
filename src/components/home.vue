@@ -3,9 +3,9 @@
 	<div class="home">
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
-			<!-- <mt-tab-container-item id="message-container">
+			<mt-tab-container-item id="message-container">
 				<div class="container">
-					MESSAGE SELECT
+					<!-- MESSAGE SELECT -->
 					<div class="message-select">
 						<select name="">
 							<option value="0">全部</option>
@@ -14,7 +14,7 @@
 							<option value="3">叮消息</option>
 						</select>
 					</div>
-					MESSAGE CONTENT 
+					<!-- MESSAGE CONTENT  -->
 					<div class="message-box">
 						<div class="message-item">
 							<div class="message-detail">
@@ -31,7 +31,7 @@
 
 					</div>
 				</div>
-			</mt-tab-container-item> -->
+			</mt-tab-container-item>
 			<mt-tab-container-item id="work-container">
 				<div class="container">
 					<div class="title-box">
@@ -135,10 +135,10 @@
 		</mt-tab-container>
 		<!-- tabbar -->
 		<mt-tabbar v-model="selected" fixed>
-			<!-- <mt-tab-item id="message">
+			<mt-tab-item id="message">
 				<img slot="icon" src="../static/icon/comments.svg" class="message">
 				消息
-			</mt-tab-item> -->
+			</mt-tab-item>
 			<mt-tab-item id="work">
 				<img slot="icon" src="../static/icon/allo.svg" class="work">
 				工作
@@ -154,8 +154,8 @@
 <!-- SCRIPT -->
 <script>
 /* FOOTER ICON INPUT */
-// import messageSrc from '../static/icon/comments.svg'
-// import messageSrco from '../static/icon/commentso.svg'
+import messageSrc from '../static/icon/comments.svg'
+import messageSrco from '../static/icon/commentso.svg'
 import allSrc from '../static/icon/all.svg'
 import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
@@ -181,13 +181,13 @@ export default {
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
 			$.extend(el.$user, data);
-			var iPhone = new RegExp('iPhone');
+			/*var iPhone = new RegExp('iPhone');
 			var Android = new RegExp('Android');
 			if(iPhone.test(navigator.userAgent)){
 				el.$user.phoneType = '2';
 			}else if(Android.test(navigator.userAgent)){
 				el.$user.phoneType = '1';
-			}
+			}*/
 			el.userName = data.userName;
 			el.departmentName = data.departmentName;
 			el.postName = data.postName;
@@ -234,10 +234,9 @@ export default {
 				this.active = 'work-container'
 			}else if(val == 'my-condition'){
 				this.active = 'my-container'
+			}else if(val == 'message'){
+				this.active = 'message-container'				
 			}
-			// if(val == 'message'){
-			// 	this.active = 'message-container'				
-			// }
 			//changeImg
 			this.changeImg(val);
 		}
@@ -247,31 +246,34 @@ export default {
 			if(val == 'work'){
 				$('.'+ val +'').attr('src',allSrco);
 				$('.my-condition').attr('src',accountSrc);
-				// $('.message').attr('src',messageSrc);
+				$('.message').attr('src',messageSrc);
 			}else if(val == 'my-condition'){
 				$('.'+ val +'').attr('src',accountSrco);
 				$('.work').attr('src',allSrc);
-				// $('.message').attr('src',messageSrc);
-			}
-			// if(val == 'message'){
-			// 	$('.'+ val +'').attr('src',messageSrco);
-			// 	$('.work').attr('src',allSrc);
-			// 	$('.my-condition').attr('src',accountSrc);
-			// } 
+				$('.message').attr('src',messageSrc);
+			}else if(val == 'message'){
+				$('.'+ val +'').attr('src',messageSrco);
+				$('.work').attr('src',allSrc);
+				$('.my-condition').attr('src',accountSrc);
+			} 
 		},
 		toPage:function(event){
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
-			if(a == 0){//本组件data属性设置为0的，页面前往考勤页面
+			if(a == 0 || a == 'clock'){//本组件data属性设置为0的，页面前往考勤页面
 				if(this.$user.attendanceGroupId){
-					this.$router.push({path:'/clock?value=1'});
+					if(a == 0){
+						this.$router.push({path:'/clock?value=1'});
+					}else if(a == 'clock'){
+						this.$router.push({path:'/clock?value=2'});
+					}
 				}else{
 					Toast({
 						message: '还未加入考勤组,请加入后再打卡',
 						position: 'center',
 						duration: 2000
 					});
-				}
+				}				
 			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
 			}else if(a == 'system'){
@@ -280,8 +282,6 @@ export default {
 				this.$router.push({path:'/myFlow'});
 			}else if (a == 'examine'){
 				this.$router.push({path:'/examine'});
-			}else if(a == 'clock'){
-				this.$router.push({path:'/clock?value=2'});
 			}
 			// else if(a == 'logout'){
 			// 	localStorage.removeItem('userName');

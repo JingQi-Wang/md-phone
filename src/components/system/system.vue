@@ -15,9 +15,9 @@
 			</div>
 			<br />
 			<div>
-				<mt-cell title="WIFI管理" is-link id="wifiManage">
+				<!-- <mt-cell title="WIFI管理" is-link id="wifiManage">
 					<img slot="icon" src="../../static/icon/wifi.svg" width="24" height="24">
-				</mt-cell>
+				</mt-cell> -->
 			</div>
 
 		</div>
@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	mounted () {
-		var rolesList = this.$user.roles;
+		/*var rolesList = this.$user.roles;
 		var flag = false;
 		for(let index in rolesList){
 			if(rolesList[index].roleName == '管理员'){
@@ -50,7 +50,7 @@ export default {
 					duration:2000
 				});
 			})
-		}
+		}*/
 	},
 	methods: {
 		toPage:function(event){

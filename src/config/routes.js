@@ -39,11 +39,11 @@ export default [
       {
         path: '/',
         component: system
-      },
-      {
+      }
+      /*{
         path: '/wifi',
         component: wifi
-      }
+      }*/
     ]
    
   },
