@@ -119,6 +119,7 @@
 					<div>
 						<mt-cell title="出勤天数" v-bind:value="attendanceDays"></mt-cell>
 						<mt-cell title="休息天数" v-bind:value="restDays"></mt-cell>
+						<mt-cell title="请假" v-bind:value="leaveDays"></mt-cell>						
 						<mt-cell title="迟到" v-bind:value="lateTimes"></mt-cell>
 						<mt-cell title="早退" v-bind:value="earlyTimes"></mt-cell>
 						<mt-cell title="缺卡" v-bind:value="missTimes"></mt-cell>
@@ -190,6 +191,7 @@ export default {
 			showDateMonthValue:new Date().Format('yyyy年MM月'),
 			attendanceDays:'0天',//出勤天数
 			restDays:'0天',//休息天数
+			leaveDays:'0天',//请假天数
 			lateTimes:'0次',//迟到
 			earlyTimes:'0次',//早退
 			missTimes:'0次',//缺卡
@@ -240,6 +242,7 @@ export default {
 					var a = data.clockMonthBalanceForm;
 					el.attendanceDays = a.attendanceDays +'天';
 					el.restDays = a.restDays +'天';
+					el.leaveDays = a.leaveDays +'天';
 					el.lateTimes = a.lateTimes +'次';
 					el.earlyTimes = a.earlyTimes +'次';
 					el.missTimes = a.missTimes +'次';
@@ -247,6 +250,7 @@ export default {
 				}else{
 					el.attendanceDays = '0天';
 					el.restDays = '0天';
+					el.leaveDays = '0天';
 					el.lateTimes = '0次';
 					el.earlyTimes = '0次';
 					el.missTimes = '0次';
@@ -324,7 +328,7 @@ export default {
 		},
 		clock:function(){
 			var el = this;
-			var data = '';
+			/*var data = '';
 			if(el.isLeave == 1){				
 				data = {
 					outLocation:el.wifiId,
@@ -335,35 +339,67 @@ export default {
 					wifiId:el.wifiId,
 					wifiName:el.wifiValue
 				}
+			}*/
+			if(el.wifiId == '' || el.wifiId == null){
+				Toast({
+					message: '稍等，请定位后再打卡！',
+					position: 'center',
+					duration: 2000
+				});
+				return ;
 			}
-			el.$index.ajax(this, '/phClock/clock.ph', data, function(data){
+			el.$index.ajax(this, '/phClock/clock.ph', {
+				outLocation:el.wifiId,
+				outAddress:el.wifiValue
+			}, function(data){
+				Toast({
+					message: data,
+					position: 'center',
+					duration: 2000
+				});
 				el.getClockState()
 			})
 		},
 		getClockState:function(){
 			var el = this;
-			var ips = ''
+			/*var ips = ''
 			if(el.$user.phoneType == 1){
 				ips = returnCitySN['cip'];
 				// ips = '183.129110.238'
 			}else if(el.$user.phoneType == 2){
 				ips = returnCitySN['cip'];
 				// ips = returnCitySN['cip'].substring(0,returnCitySN['cip'].lastIndexOf('.'));
-			}
-			el.$index.ajax(this, '/phClock/getMyClockState.ph', {
-				phoneType : el.$user.phoneType,
-				ips : ips
-			}, function(data){
+			}*/
+			el.$index.ajax(this, '/phClock/getMyClockState.ph', null, function(data){
 				// 成功回调
 				var obj = data;
 				//若wifiId和name为空，则外勤打卡，否则正常打卡
-				if(obj.wifiName && obj.wifiId){
-					el.isLeave = 0;					
+				/*if(obj.wifiName && obj.wifiId){
+					el.isLeave = 0;
 					el.wifiName = '已进入考勤WIFI：' + obj.wifiName;
 					el.wifiValue = obj.wifiName;
 					el.wifiId = obj.wifiId;
 					$('.go-click').removeClass('orange');
-				}
+				}*/
+				el.wifiName = '定位中';
+				var geolocation = new BMap.Geolocation();
+				geolocation.getCurrentPosition(function(r){
+					var mk = new BMap.Marker(r.point);    
+					var currentLat = r.point.lat;
+					var currentLon = r.point.lng;
+
+					var pt = new BMap.Point(currentLon, currentLat);
+					var geoc = new BMap.Geocoder();
+					geoc.getLocation(pt, function (rs) {
+						var addComp = rs.addressComponents;
+						var city = addComp.city;
+						var addComp = rs.addressComponents;
+						var texts = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber ;
+						el.wifiName = '当前位置：' + texts
+						el.wifiValue = texts
+						el.wifiId = currentLon + "," + currentLat
+					});
+				})
 				if(obj.attendanceToday){
 					var H = obj.serverTimeStr.substr(0,2);
 					var M = obj.serverTimeStr.substr(3,2);
@@ -442,9 +478,8 @@ export default {
 							el.offDutyStatus = '早退'
 						}
 					}
-
 					// 若是外勤
-					if(!obj.wifiName && !obj.wifiId){
+					/*if(!obj.wifiName && !obj.wifiId){
 						el.isLeave = 1;
 						el.dutyStatus = '外勤打卡';
 						$('.go-click').addClass('orange');
@@ -468,7 +503,7 @@ export default {
 							});
 						})
 						
-					}
+					}*/
 
 				}else{
 					Toast({

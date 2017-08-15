@@ -3,9 +3,10 @@
 	<div class="home">
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
-			<mt-tab-container-item id="message-container">
+			
+			<!--<mt-tab-container-item id="message-container">
 				<div class="container">
-					<!-- MESSAGE SELECT -->
+					 MESSAGE SELECT 
 					<div class="message-select">
 						<select name="">
 							<option value="0">全部</option>
@@ -14,7 +15,7 @@
 							<option value="3">叮消息</option>
 						</select>
 					</div>
-					<!-- MESSAGE CONTENT  -->
+					 MESSAGE CONTENT  
 					<div class="message-box">
 						<div class="message-item">
 							<div class="message-detail">
@@ -30,8 +31,8 @@
 
 
 					</div>
-				</div>-->
-			</mt-tab-container-item>
+				</div>
+			</mt-tab-container-item>-->
 			<mt-tab-container-item id="work-container">
 				<div class="container">
 					<div class="title-box">
@@ -135,10 +136,10 @@
 		</mt-tab-container>
 		<!-- tabbar -->
 		<mt-tabbar v-model="selected" fixed>
-			<mt-tab-item id="message">
+			<!--<mt-tab-item id="message">
 				<img slot="icon" src="../static/icon/comments.svg" class="message">
 				消息
-			</mt-tab-item>
+			</mt-tab-item>-->
 			<mt-tab-item id="work">
 				<img slot="icon" src="../static/icon/allo.svg" class="work">
 				工作
@@ -154,8 +155,8 @@
 <!-- SCRIPT -->
 <script>
 /* FOOTER ICON INPUT */
-import messageSrc from '../static/icon/comments.svg'
-import messageSrco from '../static/icon/commentso.svg'
+// import messageSrc from '../static/icon/comments.svg'
+// import messageSrco from '../static/icon/commentso.svg'
 import allSrc from '../static/icon/all.svg'
 import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
@@ -177,6 +178,29 @@ export default {
 	},
 	created () {
 		// 组件创建完后执行
+		$.ajax({
+			url: 'http://192.168.0.108:8888/mdoa/phUser/login.ph',
+			data:{
+				sessionId: localStorage.getItem('sessionId') || null,
+				userAccount : 'lvbing',
+				password : '123456'
+			},
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.sessionId){
+					localStorage.setItem('sessionId',data.sessionId);
+				}
+				if(data.success){
+					
+				}else{
+					
+				}
+			},
+			error:function() {
+
+			}
+		})
 		var el = this;
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
@@ -234,9 +258,10 @@ export default {
 				this.active = 'work-container'
 			}else if(val == 'my-condition'){
 				this.active = 'my-container'
-			}else if(val == 'message'){
-				this.active = 'message-container'				
 			}
+			/*if(val == 'message'){
+				this.active = 'message-container'				
+			}*/
 			//changeImg
 			this.changeImg(val);
 		}
@@ -246,16 +271,17 @@ export default {
 			if(val == 'work'){
 				$('.'+ val +'').attr('src',allSrco);
 				$('.my-condition').attr('src',accountSrc);
-				$('.message').attr('src',messageSrc);
+				// $('.message').attr('src',messageSrc);
 			}else if(val == 'my-condition'){
 				$('.'+ val +'').attr('src',accountSrco);
 				$('.work').attr('src',allSrc);
-				$('.message').attr('src',messageSrc);
-			}else if(val == 'message'){
+				// $('.message').attr('src',messageSrc);
+			}
+			/*if(val == 'message'){
 				$('.'+ val +'').attr('src',messageSrco);
 				$('.work').attr('src',allSrc);
 				$('.my-condition').attr('src',accountSrc);
-			} 
+			}*/ 
 		},
 		toPage:function(event){
 			var el = event.currentTarget;

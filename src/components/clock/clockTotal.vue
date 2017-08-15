@@ -27,7 +27,7 @@
 			<div class="calendar" id="calendar"></div>
 			<!-- class box -->
 			<div class="class-box">
-				<p>班次：{{ dutyType }}</p>
+				<p>班次：<span v-show="warn" style="color:#ff9966;">{{ dutyType }}</span></p>
 				<p class="classDuty">{{ onDutyTime }} - {{ offDutyTime }}</p>
 				<p>&nbsp;&nbsp;</p>
 				<p>考勤组：{{ attendanceGroupName }}</p>
@@ -93,6 +93,7 @@ export default {
 			offDutyStatus:'',//下班状态
 			on:false,
 			off:false,
+			warn:false,
 			currentDay:''//选中的日期
 		}
 	},
@@ -143,10 +144,10 @@ export default {
 								}else{
 									tds.eq(j).find('i').addClass('orange')
 								}
+							}else if(data.clockDayForms[i].leaveFlag == 4){
+								tds.eq(j).find('i').addClass('gray')
 							}else{
-								if(data.clockDayForms[i].clockInTime || data.clockDayForms[i].clockOUtTime){
-									tds.eq(j).find('i').addClass('blue')
-								}
+								tds.eq(j).find('i').addClass('orange')
 							}
 
 						}
@@ -243,13 +244,14 @@ export default {
 			}
 		},
 		getMyClockDayDetail:function(recordDateStr){
-			var el = this;
+			var el = this;			
 			el.currentDay = recordDateStr.substr(0,4)+'-'+recordDateStr.substr(4,2)+ '-' +recordDateStr.substr(6,2);
 			el.$index.ajax(this, '/phClock/getMyClockDayDetail.ph', {
 				recordDateStr:el.currentDay,
 				isLeave:1
 			}, function(data){
 				// 成功回调
+				el.warn = false;
 				if(data.attendanceRecord){
 					$('.classDuty').show();
 					$('.that-day').show();					
@@ -278,22 +280,25 @@ export default {
 							el.off = true;
 						}
 					}else{
+						el.warn = true;
 						if(data.attendanceRecord.leaveFlag == 3){
-							el.dutyType = '外勤';
+							el.dutyType = '公出';
 						}else if(data.attendanceRecord.leaveFlag == 4){
 							el.dutyType = '休息';
 						}else{
-							el.dutyType = '请假';
+							el.dutyType = '请假';							
 						}
 						$('.classDuty').hide();
+						el.offDutyStatus = '';
+						el.onDutyStatus = '';
 						el.onDutyTime = data.attendanceRecord.onDutyTime
 						el.offDutyTime = data.attendanceRecord.offDutyTime
 						el.onClockTime = data.attendanceRecord.clockInTime || ''
 						el.offClockTime = data.attendanceRecord.clockOutTime || ''
 					}
-
 					
-				}else{
+				}else{			
+					el.warn = true;		
 					$('.that-day').hide();
 					$('.classDuty').hide();
 					el.dutyType = '未安排班次'
