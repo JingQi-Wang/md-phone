@@ -143,7 +143,9 @@ export default {
 				that.leaveType = '公出';
 			}else if (data.typeId == '003') {
 				that.leaveType = '离职';
-			}			that.userName = data.userName;
+			}
+			that.user = data;
+			that.userName = data.userName;
 			that.title = data.title;
 			that.startTime = data.startTimeStr;
 			that.endTime = data.endTimeStr;
@@ -211,6 +213,7 @@ export default {
 			var status = $(ele).attr('status');
 			var el = this;
 			if(status == '1'){
+				console.log(el.user)
 				var userName = el.user.userName;
 				var userId = el.user.userId;
 				var sendUserId = el.items[0].executorId;
