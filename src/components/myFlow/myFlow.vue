@@ -17,11 +17,11 @@
 			<div class="logArea">
 				<div class="flowArea" v-for="item of items">
 					<h3>{{ item.processTypeName }}</h3>
-					<div class="flowTitle">
-						<div  class="flowTitle1">
+					<div class="flowStatus">
+						<div  class="flowStatus1">
 							标题
 						</div>
-						<div  class="flowTitle2">
+						<div  class="flowStatus2">
 							{{ item.title }}
 						</div>
 					</div>

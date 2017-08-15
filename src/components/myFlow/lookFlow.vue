@@ -131,10 +131,19 @@ export default {
 			processRecordId:this.$leaveType.processRecordId
 		}
 		that.$index.ajax(that,'/phMyRelated/getProcessFormMessage.ph',info,function(data){
-
 			data = $.parseJSON(data);
-			console.log(data);
-			that.leaveType = data.leaveType;
+			if (data.typeId == '001') {
+				if (data.leaveType == '1') {
+					that.leaveType = '事假';
+				}else{
+					that.leaveType = '病假';
+				}
+			}else if (data.typeId == '002') {
+				that.leaveType = '公出';
+			}else if (data.typeId == '003') {
+				that.leaveType = '离职';
+			}
+
 			that.userName = data.userName;
 			that.title = data.title;
 			that.startTime = data.startTimeStr;

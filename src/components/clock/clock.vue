@@ -1,7 +1,24 @@
 //clock.vue
 <template>
 	<div class="clock">
+		<div class="mask" v-on:click="disappear">
+							
+		</div>
+		<!-- outworkList -->
 		
+		<div class="outworkList">
+			<h3>选择一条公出请假打卡</h3>
+			<div class="listArea">
+				<p v-for="list of lists" v-on:click="Listclock" v-bind:id="list.outBusinessRecordId
+">{{ list.title }}<span>{{(list.startTimeStr).split(' ')[0]}}</span></p>
+			</div>
+			<div class="loading">
+				打卡中
+				<div>
+					<mt-spinner type="snake" color="#26a2ff"></mt-spinner>
+				</div>
+			</div>
+		</div>
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
 			<mt-tab-container-item id="clock-container">
@@ -29,7 +46,10 @@
 					</div>
 					<!-- remind -->
 					<div class="remind">
-						<p>{{ remind }}</p>
+						<p>
+							{{ remind }}
+							<mt-button type="default" size="small" v-on:click="outworkClock">公出打卡</mt-button>
+						</p>
 					</div>
 					<!-- clock box -->
 					<div class="clock-box">
@@ -104,7 +124,6 @@
 						<mt-cell title="缺卡" v-bind:value="missTimes"></mt-cell>
 						<mt-cell title="旷工" v-bind:value="absentDays"></mt-cell>
 					</div>
-
 				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
@@ -143,6 +162,7 @@ import clockSrco from '../../static/icon/clocko.svg'
 import statisticsSrc from '../../static/icon/statistics.svg'
 import statisticsSrco from '../../static/icon/statisticso.svg'
 import { Toast } from 'mint-ui';
+import { Spinner } from 'mint-ui';
 
 export default {
 	data() {
@@ -173,7 +193,8 @@ export default {
 			lateTimes:'0次',//迟到
 			earlyTimes:'0次',//早退
 			missTimes:'0次',//缺卡
-			absentDays:'0次'//旷工
+			absentDays:'0次',//旷工
+			lists:[]
 		}
 	},
 	mounted () {
@@ -483,6 +504,85 @@ export default {
 				$('.'+ val +'').attr('src',statisticsSrco);
 				$('.clock').attr('src',clockSrc);
 			}
+		},
+		outworkClock:function(){
+			var el = this;
+			el.$index.ajax(this, '/phClock/selectOutBusinessRecord.ph',{timeFlag:'1'},function(data){
+				el.lists = data.rows;
+				var wx = $(window).outerWidth();
+				var wy = $(window).outerHeight();
+				$('.mask').css({
+					'width':wx,
+					'height':wy
+				});
+				$('.outworkList').css({
+					'width':wx*.8,
+					'height':wy*.5,
+					'top':wy*.25
+				});
+				$('.outworkList .listArea').css({
+					'height':wy*.5-36.8
+				});
+				$('.outworkList .loading').css({
+					'height':(wy*.5-36.8)*2/3,
+					'padding-top':(wy*.5-36.8)/3
+				})
+				$('.outworkList').show();
+				$('.mask').show();
+			});
+			
+		},
+		Listclock:function(event){
+			var el = this;
+			var currentLat,currentLon;
+			var texts;
+			var ele = event.currentTarget;
+			var outBusinessRecordId = $(ele).attr('id');
+			var geolocation = new BMap.Geolocation();   
+			$('.outworkList .listArea').hide();
+			$('.outworkList .loading').show();
+
+			geolocation.getCurrentPosition(function(r){
+				var mk = new BMap.Marker(r.point);    
+				currentLat = r.point.lat;
+				currentLon = r.point.lng;
+
+				var pt = new BMap.Point(currentLon, currentLat);
+				var geoc = new BMap.Geocoder();
+				geoc.getLocation(pt, function (rs) {
+					var addComp = rs.addressComponents;
+					var city = addComp.city;
+					var addComp = rs.addressComponents;
+					texts = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber ;
+					var info = {
+						outAddress:texts,
+						outLocation:currentLon+','+currentLat,
+						userId:el.$user.userId,
+						outBusinessRecordId:outBusinessRecordId
+					}
+					el.$index.ajax(this, '/phClock/updateOutBusinessRecord.ph',info,function(data){
+						$('.outworkList').hide();
+						if (data == 200) {
+							Toast({
+							  message: '公出打卡成功',
+							  duration: 2000
+							});
+						}else{
+							Toast({
+							  message: '公出打卡失败',
+							  duration: 2000
+							});
+						}
+						$('.mask').hide(); 
+					});
+				});
+			})
+
+		},
+		disappear:function(event){
+			var el = event.currentTarget;
+			$(el).hide();
+			$('.outworkList').hide();
 		}
 	}
 }

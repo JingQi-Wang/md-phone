@@ -2,8 +2,13 @@
 	.container{
 		padding-bottom:0;
 		.title-box{
-			height:10%;
+			height:9%;
 		}
+	}
+	select{
+		width:10em;
+		border:none;
+		border-bottom:1px solid #dedede;
 	}
 	.flowStatus{
 		border-top:1px solid rgb(77, 169, 235);

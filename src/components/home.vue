@@ -30,7 +30,7 @@
 
 
 					</div>
-				</div>
+				</div>-->
 			</mt-tab-container-item>
 			<mt-tab-container-item id="work-container">
 				<div class="container">
@@ -79,7 +79,7 @@
 						</div>
 						<hr />
 						<div class="application-item">
-							<div>
+							<div  data="copyTo" v-on:click="toPage($event)">
 								<p>抄送流程</p>
 								<img slot="icon" src="../static/icon/flowIcon2.svg" width="35" height="35">
 							</div>
@@ -282,6 +282,8 @@ export default {
 				this.$router.push({path:'/myFlow'});
 			}else if (a == 'examine'){
 				this.$router.push({path:'/examine'});
+			}else if(a == 'copyTo'){
+				this.$router.push({path:'/copyTo'});
 			}
 			// else if(a == 'logout'){
 			// 	localStorage.removeItem('userName');

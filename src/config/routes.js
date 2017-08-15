@@ -25,6 +25,9 @@ import leaveFlow from '../components/myFlow/leaveFlow.vue'
 import examine from '../components/examine/examine.vue'
 import flowExamine from '../components/examine/flowExamine.vue'
 import examining from '../components/examine/examining.vue'
+//引入抄送子页面 
+import copyTo from '../components/copyTo/copyTo.vue'
+import lookCopyTo from '../components/copyTo/lookCopyTo.vue'
 // 配置路由
 export default [
   {
@@ -129,6 +132,21 @@ export default [
         path: '/examining',
         component: examining
       },
+    ]
+  },
+  //审批路由调用
+  {
+    path: '/copyTo',
+    component: Frame,
+    children: [
+      {
+        path: '/',
+        component: copyTo
+      },
+      {
+        path: '/lookCopyTo',
+        component: lookCopyTo
+      }
     ]
   }
 ]

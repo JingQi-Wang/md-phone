@@ -104,6 +104,62 @@ export default {
 		// 组件创建完后执行
 	},
 	mounted () {
+		$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').click(function(){
+			var jqthat = $(this);
+			var userid = jqthat.attr('id');
+			var userName = $.trim(jqthat.text());
+			var taskId = jqthat.attr('taskId');
+			var info = {
+				typeId : '001',
+				userId:userId,
+				userName:userName,
+				taskId:taskId
+			}
+			if($('.leaveFlow .examine .flowPeople') == 1){
+
+				that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
+					Toast({
+					  message: data,
+					  duration: 3000
+					});
+					if (data =="删除成功") {
+						$(jqthat).remove();
+					}
+				});
+			}else{
+				that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
+					Toast({
+					  message: data,
+					  duration: 3000
+					});
+					if (data =="删除成功") {
+						$(jqthat).remove();
+						$('.leaveFlow .examine img:last').remove();
+					}
+				});
+			}
+		});
+		$('.leaveFlow .flowArea .copyTo .flowPeople[data!=1]').click(function(){
+			var jqthat = $(this);
+			var userid = jqthat.attr('id');
+			var userName = $.trim(jqthat.text());
+			var taskId = jqthat.attr('taskId');
+			var info = {
+				typeId : '001',
+				userId:userId,
+				userName:userName,
+				taskId:taskId
+			}
+			that.$index.ajax(that,'/phMyProcess/deleteCopyTo.ph',info,function(data){
+				Toast({
+				  message: data,
+				  duration: 3000
+				});
+				if (data =="删除成功") {
+					$(jqthat).remove();
+				}
+			});
+		});
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
 		var that = this;
 		var typeId = that.$leaveType.typeId;

@@ -1,12 +1,11 @@
-//flowExamine.vue
 <template>
-	<div class="flowExamine">	
+	<div class="lookCopyTo">	
 		<!-- 内容 -->
 		<div class="container">
 			<div class="title-box">
 				<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">							
 				<div class="m-office">
-					流程审批
+					抄送流程详情
 				</div>
 				<div class="m-icon">
 				</div>
@@ -100,16 +99,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="flowBottom" data="1" v-on:click="toPage">
-			审批
-		</div>
 	</div>
 </template>
 
-<!-- script -->
 <script>
 import arrow from '../../static/icon/arrow.svg';
-import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
@@ -153,14 +147,14 @@ export default {
 			 	str += '<span class="flowPeople" id="'+i.executorId+'">'+i.executorName+'</span>';
 			 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
 			}; 
-			$('.flowExamine .flowArea .examine').append(str);
-			$('.flowExamine .flowArea .examine img:last').remove();
+			$('.lookCopyTo .flowArea .examine').append(str);
+			$('.lookCopyTo .flowArea .examine img:last').remove();
 			var copyToUsers = data.copyToUsers;
 			str = '';
 			for(var i = 0;i<copyToUsers.length;i++){
 				str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'">'+copyToUsers[i].executorName+'</span>';
 			}
-			$('.flowExamine .flowArea .copy').append(str);
+			$('.lookCopyTo .flowArea .copy').append(str);
 		});
 		that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
 			that.items = data;
@@ -171,9 +165,7 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			if(a == 0){//
-				this.$router.push({path:'/examine'});
-			}else if (a == 1) {
-				this.$router.push({path:'/examining'});
+				this.$router.push({path:'/copyTo'});
 			}
 		}
 	}
