@@ -9,9 +9,9 @@
 					查看流程
 				</div>
 				<div class="m-icon">
-					<div class="office-icon">
+					<!-- <div class="office-icon">
 						<img slot="icon" src="../../static/icon/refresh.svg" width="24" height="24" v-on:click="refresh">
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="logArea">
@@ -104,7 +104,7 @@
 			</div>
 		</div>
 		<div class="flowBottom" v-on:click="ding">
-			叮一下
+			催办
 		</div>
 	</div>
 </template>
@@ -116,6 +116,7 @@ import { Toast } from 'mint-ui';
 export default {
 	data() {
 		return {
+			user:'',
 			items:[],
 			leaveType:'',
 			userName:'',
@@ -143,7 +144,7 @@ export default {
 			}else if (data.typeId == '003') {
 				that.leaveType = '离职';
 			}
-
+			that.user = data;
 			that.userName = data.userName;
 			that.title = data.title;
 			that.startTime = data.startTimeStr;
@@ -177,7 +178,7 @@ export default {
 				var status = data[data.length-1].examineStatus;
 				if (status == '1') {
 					$('.lookFlow .flowBottom').attr('status','1');
-					$('.lookFlow .flowBottom').text('叮一下');
+					$('.lookFlow .flowBottom').text('催办');
 				}else if(status == '2'){
 					$('.lookFlow .flowBottom').attr('status','2');
 					$('.lookFlow .flowBottom').text('已通过');
@@ -192,7 +193,7 @@ export default {
 				}
 			}else{
 				$('.lookFlow .flowBottom').attr('status','1');
-				$('.lookFlow .flowBottom').text('叮一下');
+				$('.lookFlow .flowBottom').text('催办');
 			}
 		});
 	},
@@ -204,14 +205,49 @@ export default {
 				this.$router.push({path:'/myFlow'});
 			}
 		},
-		refresh:function(){
-			window.location.reload()
-		},
+		// refresh:function(){
+		// 	window.location.reload()
+		// },
 		ding:function(event){
-			var el = event.currentTarget;
-			var status = $(el).attr('status');
+			var ele = event.currentTarget;
+			var status = $(ele).attr('status');
+			var el = this;
 			if(status == '1'){
-
+				console.log(el.user)
+				var userName = el.user.userName;
+				var userId = el.user.userId;
+				var sendUserId = el.items[0].executorId;
+				var sendUserName = el.items[0].executorName;
+				var type = el.user.typeId;
+				var whatProcess = '';	
+				if(type == '001'){
+					whatProcess = '请假申请'
+				}else if(type == '002'){
+					whatProcess = '公出申请'
+				}else if(type == '003'){
+					whatProcess = '离职申请'
+				}else if(type == '004'){
+					whatProcess = '福利发放申请'
+				}else if(type == '005'){
+					whatProcess = '合同交单申请'
+				}else if(type == '006'){
+					whatProcess = '公文发放申请'
+				}else if(type == '007'){
+					whatProcess = '补卡申请'
+				}
+				var message = sendUserName + ',' + userName + '希望您尽快对他的' + whatProcess + '进行审批！谢谢！';
+				el.$index.ajax(this,'/phUrgeMessage/urgeProcess.ph',{
+					userId:userId,
+					sendUserId:sendUserId,
+					sendUserName:sendUserName,
+					message:message
+				},function(data){
+					Toast({
+						message: '催办成功！',
+						position: 'center',
+						duration: 2000
+					});
+				});
 			}
 		}
 	}

@@ -302,7 +302,7 @@ export default {
 			var a = $(el).attr('data');
 			var typeId = this.$leaveType.typeId;
 			if (a == 0 && typeId == '007') {
-				this.$router.push({path:'/clockTotalExplain'});
+				this.$router.push({path:'/clockTotal'});
 			}else if( a == 0){
 				this.$router.push({path:'/launchFlow'});
 			}
