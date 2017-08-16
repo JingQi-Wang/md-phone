@@ -104,7 +104,6 @@
 			</div>
 		</div>
 		<div class="flowBottom" v-on:click="ding">
-			催办
 		</div>
 	</div>
 </template>
@@ -150,6 +149,39 @@ export default {
 			that.startTime = data.startTimeStr;
 			that.endTime = data.endTimeStr;
 			that.reason = data.reason;
+
+			that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
+				if (data.length > 0 ) {
+					that.items = data;
+					var status = data[data.length-1].examineStatus;
+					if (status == '1') {
+						$('.lookFlow .flowBottom').attr('status','1');
+						if(that.user.userId == that.$user.userId){
+							$('.lookFlow .flowBottom').show();
+							$('.lookFlow .flowBottom').text('催办');
+						}
+					}else{
+						$('.lookFlow .flowBottom').show();
+						if(status == '2'){
+							$('.lookFlow .flowBottom').attr('status','2');
+							$('.lookFlow .flowBottom').text('已通过');
+						}else if(status == '3'){
+							$('.lookFlow .flowBottom').attr('status','3');
+							$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+							$('.lookFlow .flowBottom').text('已被驳回');
+						}else if(status == '4'){
+							$('.lookFlow .flowBottom').attr('status','4');
+							$('.lookFlow .flowBottom').addClass('reject-flowBottom');
+							$('.lookFlow .flowBottom').text('已被撤回');
+						}
+					}
+					
+				}
+				/*else{
+					$('.lookFlow .flowBottom').attr('status','1');
+					$('.lookFlow .flowBottom').text('催办');
+				}*/
+			});
 		});
 		that.$index.ajax(that,'/phMyRelated/getProcessExecutor.ph',info,function(data){
 			//data = $.parseJSON(data);
@@ -172,30 +204,7 @@ export default {
 				$('.lookFlow .flowArea .copyTo').append(str);
 			}
 		});
-		that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
-			if (data.length > 0 ) {
-				that.items = data;
-				var status = data[data.length-1].examineStatus;
-				if (status == '1') {
-					$('.lookFlow .flowBottom').attr('status','1');
-					$('.lookFlow .flowBottom').text('催办');
-				}else if(status == '2'){
-					$('.lookFlow .flowBottom').attr('status','2');
-					$('.lookFlow .flowBottom').text('已通过');
-				}else if(status == '3'){
-					$('.lookFlow .flowBottom').attr('status','3');
-					$('.lookFlow .flowBottom').addClass('reject-flowBottom');
-					$('.lookFlow .flowBottom').text('已被驳回');
-				}else if(status == '4'){
-					$('.lookFlow .flowBottom').attr('status','4');
-					$('.lookFlow .flowBottom').addClass('reject-flowBottom');
-					$('.lookFlow .flowBottom').text('已被撤回');
-				}
-			}else{
-				$('.lookFlow .flowBottom').attr('status','1');
-				$('.lookFlow .flowBottom').text('催办');
-			}
-		});
+		
 	},
 	methods: {
 		toPage:function(event){
@@ -213,11 +222,10 @@ export default {
 			var status = $(ele).attr('status');
 			var el = this;
 			if(status == '1'){
-				console.log(el.user)
-				var userName = el.user.userName;
-				var userId = el.user.userId;
-				var sendUserId = el.items[0].executorId;
-				var sendUserName = el.items[0].executorName;
+				var userName = el.items[0].executorName;//接收人
+				var userId = el.items[0].executorId;
+				var sendUserId = el.user.userId;
+				var sendUserName = el.user.userName;//发起人
 				var type = el.user.typeId;
 				var whatProcess = '';	
 				if(type == '001'){
@@ -235,7 +243,7 @@ export default {
 				}else if(type == '007'){
 					whatProcess = '补卡申请'
 				}
-				var message = sendUserName + ',' + userName + '希望您尽快对他的' + whatProcess + '进行审批！谢谢！';
+				var message = userName + ',' + sendUserName + '希望您尽快对他的' + whatProcess + '进行审批！谢谢！';
 				el.$index.ajax(this,'/phUrgeMessage/urgeProcess.ph',{
 					userId:userId,
 					sendUserId:sendUserId,
