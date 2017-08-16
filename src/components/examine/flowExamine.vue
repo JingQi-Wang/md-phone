@@ -150,6 +150,9 @@ export default {
 			var excuteUserHead = data.excuteUserHead;
 			var str = '';
 			for (var i = excuteUserHead; i ; i = i.nextTask) {
+				if (i.executorId == that.$user.userId) {
+					that.$leaveType.taskId = i.taskId;
+				}
 			 	str += '<span class="flowPeople" id="'+i.executorId+'">'+i.executorName+'</span>';
 			 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
 			}; 

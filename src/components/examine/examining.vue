@@ -69,7 +69,8 @@ export default {
 				}
 				var info = {
 					examineStatus:examineStatus,
-					executorIdea:that.executorIdea
+					executorIdea:that.executorIdea,
+					taskId:that.$leaveType.taskId
 				}
 				that.$index.ajax(that,'/phMyProcess/examineTask.ph',info,function(data){
 					Toast({
