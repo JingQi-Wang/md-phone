@@ -77,7 +77,7 @@ export default {
 						message: data,
 						duration: 2000
 					});
-					that.$router.push({path:'/flowExamine'});
+					that.$router.push({path:'/examine'});
 				});
 			}			
 		}

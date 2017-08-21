@@ -48,7 +48,10 @@
 					</div>
 					<!-- BANNER -->
 					<div class="banner">
-						
+						<mt-swipe :auto="4000">
+							<mt-swipe-item><img src="../static/image/2.jpg" alt="" width="100%" /></mt-swipe-item>
+							<mt-swipe-item><img src="../static/image/1.jpg" alt="" width="100%" /></mt-swipe-item>
+						</mt-swipe>
 					</div>
 					<!-- MANNAGE -->
 					<div class="go-mannage">
@@ -182,8 +185,10 @@ export default {
 			url: 'http://192.168.0.108:8888/mdoa/phUser/login.ph',
 			data:{
 				sessionId: localStorage.getItem('sessionId') || null,
-				userAccount : 'lvbing',
+				userAccount : '100100',
 				password : '123456'
+				// userAccount : '3000272',
+				// password : '123456'
 			},
 			type:"post",
 			dataType:"json",

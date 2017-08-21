@@ -29,7 +29,7 @@
 							{{ title }}
 						</div>
 					</div>
-					<div class="flowStatus">
+					<div class="flowStatus" v-show="haveTime">
 						<div  class="flowStatus1">
 							开始时间
 						</div>
@@ -37,7 +37,7 @@
 							{{ startTime }}
 						</div>
 					</div>
-					<div class="flowStatus">
+					<div class="flowStatus" v-show="haveTime">
 						<div  class="flowStatus1">
 							结束时间
 						</div>
@@ -47,7 +47,7 @@
 					</div>
 					<div class="flowStatus">
 						<div  class="flowStatus1">
-							请假原因
+							{{ because }}
 						</div>
 						<div  class="flowStatus2">
 							{{ reason }}
@@ -113,7 +113,9 @@ export default {
 			title:'',
 			startTime:'',
 			endTime:'',
-			reason:''
+			reason:'',
+			haveTime:false,
+			because:''
 		}
 	},
 	mounted () {
@@ -129,12 +131,20 @@ export default {
 				}else{
 					that.leaveType = '病假';
 				}
+				that.haveTime = true;
+				that.because = '请假原因';
 			}else if (data.typeId == '002') {
 				that.leaveType = '公出';
+				that.haveTime = true;
+				that.because = '公出原因';
 			}else if (data.typeId == '003') {
 				that.leaveType = '离职';
+				that.because = '离职原因';
+			}else if (data.typeId == '007') {
+				that.leaveType = '补卡';
+				that.because = '缺卡原因';
 			}
-			that.userName = data.leaveType;
+			that.userName = data.userName;
 			that.title = data.title;
 			that.startTime = data.startTimeStr;
 			that.endTime = data.endTimeStr;

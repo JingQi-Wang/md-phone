@@ -103,63 +103,7 @@ export default {
 	created () {
 		// 组件创建完后执行
 	},
-	mounted () {
-		$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').click(function(){
-			var jqthat = $(this);
-			var userid = jqthat.attr('id');
-			var userName = $.trim(jqthat.text());
-			var taskId = jqthat.attr('taskId');
-			var info = {
-				typeId : '001',
-				userId:userId,
-				userName:userName,
-				taskId:taskId
-			}
-			if($('.leaveFlow .examine .flowPeople') == 1){
-
-				that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
-					Toast({
-					  message: data,
-					  duration: 3000
-					});
-					if (data =="删除成功") {
-						$(jqthat).remove();
-					}
-				});
-			}else{
-				that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
-					Toast({
-					  message: data,
-					  duration: 3000
-					});
-					if (data =="删除成功") {
-						$(jqthat).remove();
-						$('.leaveFlow .examine img:last').remove();
-					}
-				});
-			}
-		});
-		$('.leaveFlow .flowArea .copyTo .flowPeople[data!=1]').click(function(){
-			var jqthat = $(this);
-			var userid = jqthat.attr('id');
-			var userName = $.trim(jqthat.text());
-			var taskId = jqthat.attr('taskId');
-			var info = {
-				typeId : '001',
-				userId:userId,
-				userName:userName,
-				taskId:taskId
-			}
-			that.$index.ajax(that,'/phMyProcess/deleteCopyTo.ph',info,function(data){
-				Toast({
-				  message: data,
-				  duration: 3000
-				});
-				if (data =="删除成功") {
-					$(jqthat).remove();
-				}
-			});
-		});
+	mounted () {		
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
 		var that = this;
 		var typeId = that.$leaveType.typeId;
@@ -235,7 +179,7 @@ export default {
 					+  '<input type="text" class="title"/></div>'
 					+  '</div>'
 					+  '<div class="flowStatus">'
-					+  '<div  class="flowStatus1">公出原因</div>'
+					+  '<div  class="flowStatus1">离职原因</div>'
 					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'	
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
@@ -282,6 +226,66 @@ export default {
 				}
 				$('.leaveFlow .flowArea .copyTo .addPeople').before(str);
 			}
+			$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').click(function(){
+				var jqthat = $(this);
+				var userId = jqthat.attr('id');
+				var userName = $.trim(jqthat.text());
+				var taskId = jqthat.attr('taskId');
+				var info = {
+					typeId : that.$leaveType.typeId,
+					userId:userId,
+					userName:userName,
+					taskId:taskId
+				}
+				if($('.leaveFlow .examine .flowPeople').length == 1){
+
+					that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
+						Toast({
+							message: data,
+							duration: 3000
+						});
+						if (data =="删除成功") {
+							$(jqthat).remove();
+						}
+					});
+				}else{
+					that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
+						Toast({
+							message: data,
+							duration: 3000
+						});
+						if (data =="删除成功") {
+							if($(jqthat).prev('img').length == 1){
+								$(jqthat).prev('img').remove();
+							}else{
+								$(jqthat).next('img').remove();
+							}
+							$(jqthat).remove();
+						}
+					});
+				}
+			});
+			$('.leaveFlow .flowArea .copyTo .flowPeople[data!=1]').click(function(){
+				var jqthat = $(this);
+				var userId = jqthat.attr('id');
+				var userName = $.trim(jqthat.text());
+				var taskId = jqthat.attr('taskId');
+				var info = {
+					typeId : that.$leaveType.typeId,
+					userId:userId,
+					userName:userName,
+					taskId:taskId
+				}
+				that.$index.ajax(that,'/phMyProcess/deleteCopyTo.ph',info,function(data){
+					Toast({
+					  message: data,
+					  duration: 3000
+					});
+					if (data =="删除成功") {
+						$(jqthat).remove();
+					}
+				});
+			});
 		});
 	},
 	updated () {
@@ -348,31 +352,32 @@ export default {
 			var userName = $.trim($(el).text());
 			if (that.judgeFlag == 0) {
 				var info = {
-					typeId : '001',
+					typeId : that.$leaveType.typeId,
 					userId:userId,
 					userName:userName
 				}
 				that.$index.ajax(that,'/phMyProcess/addExecute.ph',info,function(data){
 					if($('.leaveFlow .examine .flowPeople').length == 1){
-						var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
+						var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
 					}else{
-						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
+						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
 					}
 					$('.leaveFlow .examine .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
 					$('.leaveFlow .container').eq(0).show();
+					$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').unbind('click');
 					$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').click(function(){
 						var jqthat = $(this);
-						var userid = jqthat.attr('id');
+						var userId = jqthat.attr('id');
 						var userName = $.trim(jqthat.text());
 						var taskId = jqthat.attr('taskId');
 						var info = {
-							typeId : '001',
+							typeId : that.$leaveType.typeId,
 							userId:userId,
 							userName:userName,
 							taskId:taskId
 						}
-						if($('.leaveFlow .examine .flowPeople') == 1){
+						if($('.leaveFlow .examine .flowPeople').length == 1){
 
 							that.$index.ajax(that,'/phMyProcess/deleteExecute.ph',info,function(data){
 								Toast({
@@ -390,8 +395,12 @@ export default {
 								  duration: 3000
 								});
 								if (data =="删除成功") {
+									if($(jqthat).prev('img').length == 1){
+										$(jqthat).prev('img').remove();
+									}else{
+										$(jqthat).next('img').remove();
+									}									
 									$(jqthat).remove();
-									$('.leaveFlow .examine img:last').remove();
 								}
 							});
 						}
@@ -399,22 +408,23 @@ export default {
 				});
 			}else{
 				var info = {
-					typeId : '002',
+					typeId : that.$leaveType.typeId,
 					userId:userId,
 					userName:userName
 				}
 				that.$index.ajax(that,'/phMyProcess/addCopyTo.ph',info,function(data){
-					var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data.taskId+'">'+userName+'</span>';
+					var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
 					$('.leaveFlow .copyTo .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
 					$('.leaveFlow .container').eq(0).show();
+					$('.leaveFlow .flowArea .copyTo .flowPeople[data!=1]').unbind('click');
 					$('.leaveFlow .flowArea .copyTo .flowPeople[data!=1]').click(function(){
 						var jqthat = $(this);
-						var userid = jqthat.attr('id');
+						var userId = jqthat.attr('id');
 						var userName = $.trim(jqthat.text());
 						var taskId = jqthat.attr('taskId');
 						var info = {
-							typeId : '001',
+							typeId : that.$leaveType.typeId,
 							userId:userId,
 							userName:userName,
 							taskId:taskId
@@ -475,7 +485,7 @@ export default {
 				});
 				return;
 			}
-			if(typeId = '001'){
+			if(typeId == '001'){
 				var startTimeStr = $.trim($('.leaveFlow .flow .startTime').text());
 				var endTimeStr = $.trim($('.leaveFlow .flow .endTime').text());
 				info = {
@@ -520,7 +530,7 @@ export default {
 					departmentName:that.$user.departmentName,
 					reason:reason,
 					typeId:typeId,
-					replaceType:1,
+					replaceType:that.$leaveType.replaceType,
 					replaceRecordDate:that.$leaveType.replaceRecordDate,
 					replaceTime:that.$leaveType.replaceTime
 				}
@@ -531,7 +541,7 @@ export default {
 				  duration: 3000
 				});
 				if(typeId == '007'){
-					that.$router.push({path:'/clockTotalExplain'});
+					that.$router.push({path:'/clockTotal'});
 				}else{
 					that.$router.push({path:'/launchFlow'});
 				}

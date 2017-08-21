@@ -252,12 +252,12 @@ export default {
 			}, function(data){
 				// 成功回调
 				el.warn = false;
+				el.on = false;
+				el.off = false;
 				if(data.attendanceRecord){
 					$('.classDuty').show();
 					$('.that-day').show();					
-					if(data.attendanceRecord.leaveFlag == 0){
-						el.on = false;
-						el.off = false;
+					if(data.attendanceRecord.leaveFlag == 0){						
 						el.dutyType = '';
 						el.onDutyTime = data.attendanceRecord.onDutyTime
 						el.offDutyTime = data.attendanceRecord.offDutyTime
