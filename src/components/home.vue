@@ -49,8 +49,8 @@
 					<!-- BANNER -->
 					<div class="banner">
 						<mt-swipe :auto="4000">
-							<mt-swipe-item><img src="../static/image/2.jpg" alt="" width="100%" /></mt-swipe-item>
-							<mt-swipe-item><img src="../static/image/1.jpg" alt="" width="100%" /></mt-swipe-item>
+							<mt-swipe-item><img src="../static/image/2.png" alt="" width="100%" /></mt-swipe-item>
+							<mt-swipe-item><img src="../static/image/1.png" alt="" width="100%" /></mt-swipe-item>
 						</mt-swipe>
 					</div>
 					<!-- MANNAGE -->
@@ -181,7 +181,7 @@ export default {
 	},
 	created () {
 		// 组件创建完后执行
-		$.ajax({
+		/*$.ajax({
 			url: 'http://192.168.0.108:8888/mdoa/phUser/login.ph',
 			data:{
 				sessionId: localStorage.getItem('sessionId') || null,
@@ -205,7 +205,7 @@ export default {
 			error:function() {
 
 			}
-		})
+		})*/
 		var el = this;
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
