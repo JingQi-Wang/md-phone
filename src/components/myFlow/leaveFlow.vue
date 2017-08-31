@@ -21,11 +21,17 @@
 						<div class="flowChart examine">
 							<span class="flowPeople addPeople" data="0" v-on:click="addPeople">添加</span>
 						</div>
+						<p>必须的审批人</p>
+						<div class="flowChart mustExamine">
+						</div>
 					</div>
 					<div class="flowMould">
 						<p>抄送人</p>
 						<div class="flowChart copyTo">
 							<span class="flowPeople addPeople" data="1" v-on:click="addPeople">添加</span>
+						</div>
+						<p>必须的抄送人</p>
+						<div class="flowChart mustCopyTo">
 						</div>
 					</div>
 				</div>
@@ -211,12 +217,22 @@ export default {
 			if (data.excuteUserHead) {
 				var excuteUserHead = data.excuteUserHead;
 				var str = '';
-				for (var i = excuteUserHead; i ; i = i.nextTask) {
-				 	str += '<span class="flowPeople" id="'+i.executorId+'" taskId="'+i.taskId+'">'+i.executorName+'</span>';
+				for (var i = 0; i<excuteUserHead.length ; i++) {
+				 	str += '<span class="flowPeople" id="'+excuteUserHead[i].executorId+'" taskId="'+excuteUserHead[i].taskId+'">'+excuteUserHead[i].executorName+'</span>';
 				 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
 				}; 
 				$('.leaveFlow .flowArea .examine .addPeople').before(str);
 				$('.leaveFlow .flowArea .examine img:last').remove();
+			}
+			if(data.mustExcuteUserHead){
+				var mustExcuteUserHead = data.mustExcuteUserHead;
+				var mustExStr = '';
+				for(var i = 0;i<mustExcuteUserHead.length;i++){
+					mustExStr += '<span class="flowPeople" id="'+mustExcuteUserHead[i].executorId+'" taskId="'+mustExcuteUserHead[i].taskId+'">'+mustExcuteUserHead[i].executorName+'</span>';
+				 	mustExStr += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
+				}
+				$('.leaveFlow .flowArea .mustExamine').html(mustExStr);
+				$('.leaveFlow .flowArea .mustExamine img:last').remove();
 			}
 			if(data.copyToUsers){
 				var copyToUsers = data.copyToUsers;
@@ -225,6 +241,14 @@ export default {
 					str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'" taskId="'+copyToUsers[i].taskId+'">'+copyToUsers[i].executorName+'</span>';
 				}
 				$('.leaveFlow .flowArea .copyTo .addPeople').before(str);
+			}
+			if(data.mustCopyToUsers){
+				var mustCopyToUsers = data.mustCopyToUsers;
+				var mustStr = '';
+				for(var i = 0 ; i < mustCopyToUsers.length ; i++){
+					mustStr += '<span class="flowPeople" id="'+mustCopyToUsers[i].executorId+'" taskId="'+mustCopyToUsers[i].taskId+'">'+mustCopyToUsers[i].executorName+'</span>';
+				}
+				$('.leaveFlow .flowArea .mustCopyTo').html(mustStr);
 			}
 			$('.leaveFlow .flowArea .examine .flowPeople[data!=0]').click(function(){
 				var jqthat = $(this);
