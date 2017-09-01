@@ -16,8 +16,6 @@ Date.prototype.Format = function (fmt) {
 }
 // 接口地址
 var root = 'http://centojs.com/mdoa'
-// var root = 'http://192.168.0.108:8888/mdoa'
-
 //全局的方法
 export default {
     //登录后的请求公用方法

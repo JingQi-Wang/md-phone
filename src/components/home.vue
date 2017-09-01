@@ -165,7 +165,7 @@ import allSrco from '../static/icon/allo.svg'
 import accountSrc from '../static/icon/account.svg'
 import accountSrco from '../static/icon/accounto.svg'
 import { Toast } from 'mint-ui';
-
+import { MessageBox } from 'mint-ui'
 export default {
 	data() {
 		return {
@@ -180,6 +180,27 @@ export default {
 		}
 	},
 	created () {
+		//lalal
+		$.ajax({
+			url: 'http://192.168.0.95:8888/mdoa/phUser/login.ph',
+			data:{
+				sessionId: localStorage.getItem('sessionId') || null,
+				userAccount : 'lvbing',
+				password : '123456'
+			},
+			type:"post",
+			dataType:"json",
+			success:function(data){
+				if(data.sessionId){
+					localStorage.setItem('sessionId',data.sessionId);
+				}else{
+				//	MessageBox('提示', '登录失败,请重新登录');
+				}
+			},
+			error:function() {
+				MessageBox('提示', '登录失败');
+			}
+		})
 		// 组件创建完后执行
 		/*$.ajax({
 			url: 'http://192.168.0.108:8888/mdoa/phUser/login.ph',

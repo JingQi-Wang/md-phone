@@ -81,6 +81,7 @@ export default {
 	},
 	mounted () {
 		var that = this;
+			that.leaveType = data.rows;
 		that.$index.ajax(that,'/phMyProcess/getProcesses.ph',null,function(data){
 			var str = '';
 			var i = 0;
@@ -116,8 +117,7 @@ export default {
 				that.$router.push({path:'/leaveFlow'});
 			});
 
-		});
-		
+		});		
 	},
 	methods: {
 		toPage:function(event){
